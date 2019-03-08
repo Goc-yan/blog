@@ -1,0 +1,18 @@
+.body {
+    padding-top: 70px
+}
+.list-wrapper {
+    border: solid thin #ccc;
+    border-radius: 5px;
+    font-size: 18px;
+    line-height: 48px;
+}
+
+.list-wrapper > li {
+    border-bottom: solid thin #ccc;
+    padding-left: 15px;
+}
+
+.list-wrapper > li:last-child {
+    border-bottom: none;
+}
