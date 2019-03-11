@@ -1,8 +1,7 @@
 import axios from 'axios'
 
-let urlparse = function (obj) {
+let urlparse = function (obj: any) {
 
-    console.log(JSON.stringify(obj))
     if (JSON.stringify(obj) === '{}') return ''
 
     let list = []
@@ -23,7 +22,7 @@ let $get = function () {
     })
 }
 
-let $post = function (url, options, callback) {
+let $post = function (url: string, options: object, callback: Function) {
 
     axios.post(url, options).then(function (response) {
         callback(response.data)
@@ -32,8 +31,7 @@ let $post = function (url, options, callback) {
     });
 }
 
-
-export default {
+export {
     $get,
     $post
 }

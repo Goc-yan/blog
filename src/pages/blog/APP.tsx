@@ -1,8 +1,9 @@
-import React, { Component } from 'react'
+import * as React from 'react'
 
 import Blog from '@components/blog'
 
-class App extends Component {
+export default class App extends React.Component {
+   
     render() {
         return (
             <>
@@ -12,5 +13,3 @@ class App extends Component {
         )
     }
 }
-
-export default App
