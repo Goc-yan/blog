@@ -5,6 +5,9 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin");
 // 根路径
 let rootUrl = path.resolve(__dirname, '..')
 
+const apiMocker = require('webpack-api-mocker');
+const mocker = path.resolve(rootUrl, 'mock', 'index.js');
+
 /**
  * 获取入口文件地址
  * @param { string } filename 
@@ -21,7 +24,13 @@ module.exports = {
         filename: 'javascripts/[name].[chunkhash].js'
     },
     devServer: {
-        contentBase: './dist'
+        contentBase: './dist',
+        // proxy: {
+        //     "/api": "http://localhost:3000"
+        // },
+        before(app, server) {
+            apiMocker(app, mocker)
+        }
     },
     module: {
         rules: [{
@@ -45,7 +54,9 @@ module.exports = {
         // 这样在项目中调用组件时就不用写过多的 '../..' 来定位相对路径
         // 可以直接 '@components/components.js' 来调用
         alias: {
-            '@components': path.resolve(rootUrl, 'src', 'components')
+            '@components': path.resolve(rootUrl, 'src', 'components'),
+            '@untils': path.resolve(rootUrl, 'src', 'untils'),
+            // '@API': path.resolve(rootUrl, 'src', 'APIPath'),
         },
     },
     plugins: [

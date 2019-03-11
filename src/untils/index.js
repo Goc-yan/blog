@@ -1,0 +1,39 @@
+import axios from 'axios'
+
+let urlparse = function (obj) {
+
+    console.log(JSON.stringify(obj))
+    if (JSON.stringify(obj) === '{}') return ''
+
+    let list = []
+    for (var key in obj) {
+        list.push(key + '=' + obj[key])
+    }
+    return '?' + list.join('&')
+}
+
+let $get = function () {
+
+    let url = arguments[0]
+    let params = typeof arguments[1] === 'object' ? urlparse(arguments[1]) : ''
+    let callback = typeof arguments[1] === 'function' ? arguments[1] : arguments[2]
+
+    axios.get(url + params).then(function (response) {
+        callback(response.data)
+    })
+}
+
+let $post = function (url, options, callback) {
+
+    axios.post(url, options).then(function (response) {
+        callback(response.data)
+    }).catch(function (error) {
+        console.log(error);
+    });
+}
+
+
+export default {
+    $get,
+    $post
+}

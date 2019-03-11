@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import axios from 'axios'
+import untils from '@untils'
 
-import { Row, Col, List, Checkbox, Button, Icon, Table, Divider, Tag } from 'antd';
+import { Row, Col, Button, Icon, Table } from 'antd';
 import "antd/dist/antd.css";
 
 import './style.css'
@@ -12,6 +12,7 @@ class Header extends Component {
     super(prop)
 
     this.state = {
+      data: [],
       selectedRowKeys: [],
       columns: [{
         title: 'ID',
@@ -31,7 +32,6 @@ class Header extends Component {
           </span>
         ),
       }],
-      data: []
     }
 
     this.onSelectChange = this.onSelectChange.bind(this);
@@ -42,10 +42,9 @@ class Header extends Component {
   getData() {
 
     let _this = this
-    var url = '//192.168.1.13:3000/api/articles/list'
-    axios.get(url).then(function (data) {
+    untils.$get('/api/articles/list', function (resData) {
       _this.setState({
-        data: [...data.data]
+        data: [...resData.data]
       })
     })
   }
@@ -53,18 +52,13 @@ class Header extends Component {
   delete() {
 
     let _this = this
-    let url = '//192.168.1.13:3000/api/articles/delete'
     let options = {
       data: this.state.selectedRowKeys
     }
 
-    axios.post(url, options)
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    untils.$post('/api/articles/delete', options, function (resData) {
+      console.log(resData);
+    })
   }
 
   onSelectChange(selectedRowKeys) {
@@ -84,7 +78,6 @@ class Header extends Component {
       selectedRowKeys,
       onChange: this.onSelectChange,
     };
-    const hasSelected = selectedRowKeys.length > 0;
 
     return (
       <div className="body">
@@ -103,7 +96,10 @@ class Header extends Component {
             </div>
           </Col>
         </Row>
-        <Table rowKey={record => record.id} rowSelection={rowSelection} columns={this.state.columns} dataSource={this.state.data} />
+        <Table rowKey={record => record.id}
+          rowSelection={rowSelection}
+          columns={this.state.columns}
+          dataSource={this.state.data} />
 
       </div>
     )

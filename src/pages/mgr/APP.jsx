@@ -6,7 +6,7 @@ import Mgr from '@components/Mgr'
 import { Layout, Menu, Breadcrumb, Icon } from 'antd';
 
 const { SubMenu } = Menu;
-const { Header, Content, Sider, Footer } = Layout;
+const { Header, Content, Sider } = Layout;
 
 
 import './style.css'

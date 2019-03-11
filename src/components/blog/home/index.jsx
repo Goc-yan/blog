@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-
 import { Row, Col } from 'antd';
 import "antd/dist/antd.css";
 
 import './style.css'
+import untils from '../../../untils';
 
-class Header extends Component {
+class Home extends Component {
 
   constructor(prop) {
     super(prop)
@@ -18,21 +18,28 @@ class Header extends Component {
   }
 
   getData() {
-    console.log('test')
 
     let _this = this
 
-    var url = '//192.168.1.13:3000/api/articles/list'
-    axios.get(url).then(function(data) {
-      _this.setState({
-        list: [...data.data]
-      })
+    axios.get('/api/articles/list').then(function(resData) {
+      
+      console.log(resData)
+      if (resData.errCode === 0) {
+
+        _this.setState({
+          list: [...resData.data]
+        })
+      } else {
+        console.log(resData.errMsg)
+      }
+
+
     })
   }
 
   componentDidMount() {
-    this.getData()
     console.log('componentDidMount')
+    this.getData()
   }
 
   render() {
@@ -42,8 +49,6 @@ class Header extends Component {
           <Col span={20} offset={2}>
             <ul className="list-wrapper">
               {this.state.list.map((data, index) => <li key={index}><a href="#">{data.title}</a></li>)}
-              <li><a href="#">webpack简易上手指南</a></li>
-              <li><a href="#">谈谈跨域</a></li>
             </ul>
           </Col>
         </Row>
@@ -52,4 +57,4 @@ class Header extends Component {
   }
 }
 
-export default Header
+export default Home

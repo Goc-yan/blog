@@ -1,7 +1,7 @@
 import Header from './header'
-import Body from './body'
+import Home from './home'
 
 export default {
     Header,
-    Body
+    Home
 }
