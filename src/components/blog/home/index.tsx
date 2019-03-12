@@ -1,15 +1,31 @@
 import * as React from 'react'
-import axios from 'axios'
 import { Row, Col } from 'antd';
 import "antd/dist/antd.css";
 
 import './style.css'
 
-// import untils from '../../../untils';
+import { $get } from '@utils/ajax'
 
-export default class Home extends React.Component {
+// import '../../../models/index'
 
-  constructor(prop:any) {
+interface Articles {
+  id: number;
+  title: string;
+}
+
+interface ResData {
+  errCode: number;
+  errMsg?: string;
+  data: Articles[];
+}
+
+interface State {
+  list: Articles[];
+}
+
+export default class Home extends React.Component<any, State> {
+
+  constructor(prop: any) {
     super(prop)
 
     this.state = {
@@ -21,20 +37,13 @@ export default class Home extends React.Component {
   getData() {
 
     let _this = this
+    $get('/api/articles/list', function (resData: ResData): void {
 
-    axios.get('/api/articles/list').then(function(resData:any) {
-      
-      console.log(resData)
-      if (resData.errCode === 0) {
-
-        _this.setState({
+      resData.errCode === 0
+        ? _this.setState({
           list: [...resData.data]
         })
-      } else {
-        console.log(resData.errMsg)
-      }
-
-
+        : console.log(resData.errMsg)
     })
   }
 
@@ -49,7 +58,7 @@ export default class Home extends React.Component {
         <Row>
           <Col span={20} offset={2}>
             <ul className="list-wrapper">
-              {/* {this.state.list.map((data, index) => <li key={index}><a href="#">{data.title}</a></li>)} */}
+              {this.state.list.map((data, index) => <li key={index}><a href="#">{data.title}</a></li>)}
             </ul>
           </Col>
         </Row>

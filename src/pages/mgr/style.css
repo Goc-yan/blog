@@ -1,16 +1,24 @@
+.mar-16-0 {
+    margin: 16px 0;
+}
+
+.bg-fff {
+    background-color: #fff;
+}
+
 #app {
     width: 100vw;
     height: 100vh;
 }
 
-.ant-layout{
+.ant-layout {
     height: 100%;
 }
 
 #components-layout-demo-top-side-2 .logo {
     width: 120px;
     height: 31px;
-    background: rgba(255,255,255,.2);  
+    background: rgba(255, 255, 255, .2);
     margin: 16px 28px 16px 0;
     float: left;
 }
@@ -22,7 +30,24 @@
 .logo {
     width: 120px;
     height: 31px;
-    background: rgba(255,255,255,.2);
+    background: rgba(255, 255, 255, .2);
     margin: 16px 24px 16px 0;
     float: left;
 }
+
+.menu {
+    height: '100%';
+    border-right: 0;
+}
+
+.content-wrapper {
+    padding: 0 24px 24px;
+}
+
+.content {
+    min-height: 280px;
+    padding: 24px;
+    margin: 0;
+    background: #fff;
+}
+

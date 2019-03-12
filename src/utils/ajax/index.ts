@@ -1,6 +1,10 @@
 import axios from 'axios'
 
-let urlparse = function (obj: any) {
+interface Obj {
+    [propName: string]: any;
+}
+
+let urlStringify = function (obj: Obj): string {
 
     if (JSON.stringify(obj) === '{}') return ''
 
@@ -11,14 +15,16 @@ let urlparse = function (obj: any) {
     return '?' + list.join('&')
 }
 
-let $get = function () {
+let $get = function (...arg: any[]): void {
 
-    let url = arguments[0]
-    let params = typeof arguments[1] === 'object' ? urlparse(arguments[1]) : ''
-    let callback = typeof arguments[1] === 'function' ? arguments[1] : arguments[2]
+    let url = arg[0]
+    let params = typeof arg[1] === 'object' ? urlStringify(arg[1]) : ''
+    let callback = typeof arg[1] === 'function' ? arg[1] : arg[2]
 
     axios.get(url + params).then(function (response) {
         callback(response.data)
+    }).catch(function (error) {
+        console.log(error);
     })
 }
 
@@ -28,10 +34,10 @@ let $post = function (url: string, options: object, callback: Function) {
         callback(response.data)
     }).catch(function (error) {
         console.log(error);
-    });
+    })
 }
 
 export {
     $get,
-    $post
+    $post,
 }

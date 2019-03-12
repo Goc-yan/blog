@@ -1,14 +1,39 @@
-import React, { Component } from 'react'
-import untils from '@untils'
+import * as React from 'react'
+import { $get, $post } from '@utils/ajax'
 
 import { Row, Col, Button, Icon, Table } from 'antd';
 import "antd/dist/antd.css";
 
 import './style.css'
 
-class Header extends Component {
+// import '../../../models/index'
 
-  constructor(prop) {
+interface Article {
+  id: number;
+  title: string;
+}
+
+interface SelectedRowKeys {
+  data: number[];
+}
+
+interface Column {
+  title: string,
+  width: number,
+  key?: string,
+  dataIndex?: string;
+  render?: any
+}
+
+interface State {
+  data: Article[];
+  selectedRowKeys: number[];
+  columns: Column[];
+}
+
+class Header extends React.Component<object, State> {
+
+  constructor(prop:object) {
     super(prop)
 
     this.state = {
@@ -26,7 +51,7 @@ class Header extends Component {
         title: 'Action',
         key: 'operation',
         width: 50,
-        render: (text, record) => (
+        render: (text: string, record: string) => (
           <span>
             <a href="javascript:;">editor</a>
           </span>
@@ -36,13 +61,12 @@ class Header extends Component {
 
     this.onSelectChange = this.onSelectChange.bind(this);
     this.delete = this.delete.bind(this);
-
   }
 
   getData() {
 
     let _this = this
-    untils.$get('/api/articles/list', function (resData) {
+    $get('/api/articles/list', function (resData: any): void {
       _this.setState({
         data: [...resData.data]
       })
@@ -56,12 +80,12 @@ class Header extends Component {
       data: this.state.selectedRowKeys
     }
 
-    untils.$post('/api/articles/delete', options, function (resData) {
+    $post('/api/articles/delete', options, function (resData: any): void {
       console.log(resData);
     })
   }
 
-  onSelectChange(selectedRowKeys) {
+  onSelectChange(selectedRowKeys: number[]): void {
     console.log('selectedRowKeys changed: ', selectedRowKeys);
     this.setState({ selectedRowKeys });
   }
@@ -96,7 +120,7 @@ class Header extends Component {
             </div>
           </Col>
         </Row>
-        <Table rowKey={record => record.id}
+        <Table rowKey={record => record.id.toString()}
           rowSelection={rowSelection}
           columns={this.state.columns}
           dataSource={this.state.data} />

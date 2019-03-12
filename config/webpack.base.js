@@ -17,12 +17,13 @@ let entryUrl = filename => path.resolve(rootUrl, 'src', 'pages', filename)
 module.exports = {
     entry: {
         blog: entryUrl('blog'),
-        // mgr: entryUrl('mgr'),
+        mgr: entryUrl('mgr'),
     },
     output: {
         path: path.resolve(rootUrl, 'dist'),
         filename: 'javascripts/[name].[chunkhash].js'
     },
+    devtool: 'source-map',
     devServer: {
         contentBase: './dist',
         // proxy: {
@@ -34,12 +35,9 @@ module.exports = {
     },
     module: {
         rules: [{
-        //     test: /\.(js|jsx)/,
-        //     exclude: /node_modules/,
-        //     use: 'babel-loader'
-        // }, {
             test: /\.tsx?$/,
-            loader: "ts-loader"
+            loader: "awesome-typescript-loader"
+
         }, {
             test: /\.js$/,
             loader: "source-map-loader",
@@ -56,15 +54,16 @@ module.exports = {
         }]
     },
     resolve: {
-        // 匹配文件类型优先权
         extensions: [".ts", ".tsx", ".js", ".json"],
-        // 这样在项目中调用组件时就不用写过多的 '../..' 来定位相对路径
-        // 可以直接 '@components/components.js' 来调用
         alias: {
             '@components': path.resolve(rootUrl, 'src', 'components'),
             '@utils': path.resolve(rootUrl, 'src', 'utils'),
         },
     },
+    // externals: {
+    //     "react": "React",
+    //     "react-dom": "ReactDOM"
+    // },
     plugins: [
         new HtmlWebpackPlugin({
             title: 'blog',
@@ -73,13 +72,13 @@ module.exports = {
             inject: 'body',
             chunks: ['blog']
         }),
-        // new HtmlWebpackPlugin({
-        //     title: 'mgr',
-        //     template: './src/pages/blog/index.html', // 模板路径
-        //     filename: './pages/mgr.html', // 输出html文件名称
-        //     inject: 'body',
-        //     chunks: ['mgr']
-        // }),
+        new HtmlWebpackPlugin({
+            title: 'mgr',
+            template: './src/pages/blog/index.html', // 模板路径
+            filename: './pages/mgr.html', // 输出html文件名称
+            inject: 'body',
+            chunks: ['mgr']
+        }),
         new ExtractTextPlugin("styles/[name].css"),
     ]
 }
