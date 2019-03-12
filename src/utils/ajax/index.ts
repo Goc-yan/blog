@@ -15,26 +15,21 @@ let urlStringify = function (obj: Obj): string {
     return '?' + list.join('&')
 }
 
-let $get = function (...arg: any[]): void {
+let $get = function (url: string, ...arg: any[]): void {
 
-    let url = arg[0]
-    let params = typeof arg[1] === 'object' ? urlStringify(arg[1]) : ''
-    let callback = typeof arg[1] === 'function' ? arg[1] : arg[2]
+    let params = typeof arg[0] === 'object' ? urlStringify(arg[0]) : ''
+    let callback = typeof arg[0] === 'function' ? arg[0] : arg[1]
 
-    axios.get(url + params).then(function (response) {
-        callback(response.data)
-    }).catch(function (error) {
-        console.log(error);
-    })
+    axios.get(url + params)
+        .then(response => callback(response.data))
+        .catch(error => console.log(error))
 }
 
 let $post = function (url: string, options: object, callback: Function) {
 
-    axios.post(url, options).then(function (response) {
-        callback(response.data)
-    }).catch(function (error) {
-        console.log(error);
-    })
+    axios.post(url, options)
+        .then(response => callback(response.data))
+        .catch(error => console.log(error))
 }
 
 export {
