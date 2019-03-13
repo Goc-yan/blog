@@ -1,8 +1,6 @@
 import axios from 'axios'
 
-interface Obj {
-    [propName: string]: any;
-}
+import { Obj } from '@models'
 
 let urlStringify = function (obj: Obj): string {
 

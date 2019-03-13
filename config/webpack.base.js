@@ -58,6 +58,7 @@ module.exports = {
         alias: {
             '@components': path.resolve(rootUrl, 'src', 'components'),
             '@utils': path.resolve(rootUrl, 'src', 'utils'),
+            '@models': path.resolve(rootUrl, 'src', 'models'),
         },
     },
     // externals: {

@@ -6,26 +6,19 @@ import './style.css'
 
 import { $get } from '@utils/ajax'
 
-// import '../../../models/index'
+import { Article, ResData } from '@models'
 
-interface Articles {
-  id: number;
-  title: string;
-}
-
-interface ResData {
-  errCode: number;
-  errMsg?: string;
-  data: Articles[];
+interface ResArticles extends ResData {
+  data: Article[];
 }
 
 interface State {
-  list: Articles[];
+  list: Article[];
 }
 
-export default class Home extends React.Component<any, State> {
+export default class Home extends React.Component<object, State> {
 
-  constructor(prop: any) {
+  constructor(prop: object) {
     super(prop)
 
     this.state = {
@@ -37,7 +30,7 @@ export default class Home extends React.Component<any, State> {
   getData() {
 
     let _this = this
-    $get('/api/articles/list', function (resData: ResData): void {
+    $get('/api/articles/list', function (resData: ResArticles): void {
 
       resData.errCode === 0
         ? _this.setState({

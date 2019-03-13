@@ -1,39 +1,28 @@
 import * as React from 'react'
+
+import Mgr from '@components/Mgr'
+
+import { TableColumn, ResData, Article } from '@models'
 import { $get, $post } from '@utils/ajax'
 
-import { Row, Col, Button, Icon, Table } from 'antd';
-import "antd/dist/antd.css";
+import { Row, Col, Button, Icon, Table } from 'antd'
 
+import "antd/dist/antd.css"
 import './style.css'
-
-// import '../../../models/index'
-
-interface Article {
-  id: number;
-  title: string;
-}
-
-interface SelectedRowKeys {
-  data: number[];
-}
-
-interface Column {
-  title: string,
-  width: number,
-  key?: string,
-  dataIndex?: string;
-  render?: any
-}
 
 interface State {
   data: Article[];
   selectedRowKeys: number[];
-  columns: Column[];
+  columns: TableColumn[];
+}
+
+interface resArticles extends ResData {
+  data: Article[]
 }
 
 class Header extends React.Component<object, State> {
 
-  constructor(prop:object) {
+  constructor(prop: object) {
     super(prop)
 
     this.state = {
@@ -66,7 +55,7 @@ class Header extends React.Component<object, State> {
   getData() {
 
     let _this = this
-    $get('/api/articles/list', function (resData: any): void {
+    $get('/api/articles/list', function (resData: resArticles): void {
       _this.setState({
         data: [...resData.data]
       })
@@ -80,7 +69,7 @@ class Header extends React.Component<object, State> {
       data: this.state.selectedRowKeys
     }
 
-    $post('/api/articles/delete', options, function (resData: any): void {
+    $post('/api/articles/delete', options, function (resData: ResData): void {
       console.log(resData);
     })
   }
@@ -120,11 +109,11 @@ class Header extends React.Component<object, State> {
             </div>
           </Col>
         </Row>
-        <Table rowKey={record => record.id.toString()}
+        {/* <Table rowKey={record => record.id.toString()}
           rowSelection={rowSelection}
           columns={this.state.columns}
-          dataSource={this.state.data} />
-
+          dataSource={this.state.data} /> */}
+        <Mgr.Editor />
       </div>
     )
   }
