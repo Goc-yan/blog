@@ -2,10 +2,6 @@
     float: right;
 }
 
-.margin-bottom-20 {
-    margin-bottom: 20px
-}
-
 .margin-left-20 {
     margin-left: 20px
 }
@@ -13,4 +9,9 @@
 th.column-id,
 td.column-id {
   text-align: left !important;
+}
+
+.btn-group {
+    overflow: hidden;
+    margin-bottom: 20px;
 }

@@ -94,21 +94,17 @@ class Header extends React.Component<object, State> {
 
     return (
       <div className="body">
-        <Row className="margin-bottom-20">
-          <Col span={4} offset={20}>
-            <div>
-              <Button
-                className="float-right margin-left-20"
-                type="danger"
-                disabled={this.state.selectedRowKeys.length === 0}
-                onClick={this.delete} >
-                <Icon type="delete" />
-                删除
+        <div className="btn-group">
+          <Button
+            className="float-right margin-left-20"
+            type="danger"
+            disabled={this.state.selectedRowKeys.length === 0}
+            onClick={this.delete} >
+            <Icon type="delete" />
+            删除
               </Button>
-              <Button className="float-right" type="primary"><Icon type="plus" />新增</Button>
-            </div>
-          </Col>
-        </Row>
+          <Button className="float-right" type="primary"><Icon type="plus" />新增</Button>
+        </div>
         {/* <Table rowKey={record => record.id.toString()}
           rowSelection={rowSelection}
           columns={this.state.columns}
