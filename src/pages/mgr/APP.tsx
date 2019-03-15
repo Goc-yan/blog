@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { HashRouter, Router, Route, Link } from 'react-router-dom'
 
 import Mgr from '@components/Mgr'
 
@@ -13,18 +14,35 @@ import './style.css'
 let menu = ['Home', 'Menu2', 'Menu3']
 let subMenu = [{
     title: 'subnav1',
-    options: ['option1', 'option2', 'option3']
+    options: [{
+        name: '文章管理',
+        router: '/'
+    }, {
+        name: '标签管理',
+        router: '/tag'
+    }]
 }, {
     title: 'subnav2',
-    options: ['option1', 'option2']
+    options: [{
+        name: 'option1',
+        router: '/'
+    }, {
+        name: 'option2',
+        router: '/'
+    }]
 }, {
     title: 'subnav3',
-    options: ['option1', 'option2', 'option3', 'option4']
+    options: [{
+        name: 'option3',
+        router: '/'
+    }, {
+        name: 'option4',
+        router: '/'
+    }]
 }]
 let breadcrumb = ['Home', 'List', 'App']
 
 class App extends React.Component {
-
 
     render() {
         return (
@@ -36,7 +54,12 @@ class App extends React.Component {
                         <Layout tagName="section" className="content-wrapper">
                             <Mgr.Breadcrumb data={breadcrumb} />
                             <Content tagName="main" className="content">
-                                <Mgr.Articles />
+                                <HashRouter>
+                                    <>
+                                        <Route path="/" exact={true} component={Mgr.Articles}></Route>
+                                        <Route path="/tag" component={Mgr.Tag}></Route>
+                                    </>
+                                </HashRouter>
                             </Content>
                         </Layout>
                     </Layout>

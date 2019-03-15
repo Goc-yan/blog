@@ -3,10 +3,6 @@ import * as React from 'react'
 
 import { Layout, Form, Input, Select, Button, Tag } from 'antd'
 
-// import * as marked from 'marked';
-// import * as hljs from 'highlight.js';
-// import Editor from 'for-editor'
-
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
 

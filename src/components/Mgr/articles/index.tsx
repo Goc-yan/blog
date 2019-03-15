@@ -5,15 +5,16 @@ import Mgr from '@components/Mgr'
 import { TableColumn, ResData, Article } from '@models'
 import { $get, $post } from '@utils/ajax'
 
-import { Row, Col, Button, Icon, Table } from 'antd'
+import { Button, Icon, Table } from 'antd'
 
 import "antd/dist/antd.css"
 import './style.css'
 
 interface State {
-  data: Article[];
-  selectedRowKeys: number[];
-  columns: TableColumn[];
+  data: Article[]
+  selectedRowKeys: number[]
+  columns: TableColumn[]
+  isEditor: boolean
 }
 
 interface resArticles extends ResData {
@@ -46,9 +47,11 @@ class Header extends React.Component<object, State> {
           </span>
         ),
       }],
+      isEditor: false,
     }
 
     this.onSelectChange = this.onSelectChange.bind(this);
+    this.switchEditState = this.switchEditState.bind(this);
     this.delete = this.delete.bind(this);
   }
 
@@ -74,6 +77,12 @@ class Header extends React.Component<object, State> {
     })
   }
 
+  switchEditState() {
+    this.setState({
+      isEditor: !this.state.isEditor
+    })
+  }
+
   onSelectChange(selectedRowKeys: number[]): void {
     console.log('selectedRowKeys changed: ', selectedRowKeys);
     this.setState({ selectedRowKeys });
@@ -95,21 +104,38 @@ class Header extends React.Component<object, State> {
     return (
       <div className="body">
         <div className="btn-group">
-          <Button
-            className="float-right margin-left-20"
-            type="danger"
-            disabled={this.state.selectedRowKeys.length === 0}
-            onClick={this.delete} >
-            <Icon type="delete" />
-            删除
-              </Button>
-          <Button className="float-right" type="primary"><Icon type="plus" />新增</Button>
+          {
+            this.state.isEditor
+              ? <Button
+                  className="float-right"
+                  onClick={this.switchEditState} >
+                  <Icon type="left" />返回
+                </Button>
+              : <>
+                  <Button
+                    className="float-right margin-left-20"
+                    type="danger"
+                    disabled={this.state.selectedRowKeys.length === 0}
+                    onClick={this.delete} >
+                    <Icon type="delete" /> 删除
+                  </Button>
+                  <Button
+                    className="float-right"
+                    type="primary"
+                    onClick={this.switchEditState} >
+                    <Icon type="plus" />新增
+                  </Button>
+                </>
+          }
         </div>
-        {/* <Table rowKey={record => record.id.toString()}
-          rowSelection={rowSelection}
-          columns={this.state.columns}
-          dataSource={this.state.data} /> */}
-        <Mgr.Editor />
+        {
+          this.state.isEditor
+            ? <Mgr.Editor />
+            : <Table rowKey={record => record.id.toString()}
+              rowSelection={rowSelection}
+              columns={this.state.columns}
+              dataSource={this.state.data} />
+        }
       </div>
     )
   }

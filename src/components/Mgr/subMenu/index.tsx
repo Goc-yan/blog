@@ -1,4 +1,6 @@
 import * as React from 'react'
+import { HashRouter, Link } from 'react-router-dom'
+ 
 
 import { Layout, Menu, Icon } from 'antd';
 
@@ -6,10 +8,14 @@ import { Layout, Menu, Icon } from 'antd';
 const { SubMenu } = Menu;
 const { Sider } = Layout;
 
+interface Option {
+  router: string
+  name: string
+}
 
 interface Nav {
   title: string
-  options: string[]
+  options: Option[]
 }
 
 interface Prop {
@@ -18,18 +24,25 @@ interface Prop {
 
 export default function (prop: Prop) {
   return (
+    <HashRouter>
+      
     <Sider width={200} className="bg-fff">
       <Menu
         className="menu"
         mode="inline"
-        defaultSelectedKeys={['1']}
+        defaultSelectedKeys={['0']}
         defaultOpenKeys={['0']} >
         {prop.data.map((subnav, index) => (
           <SubMenu key={index} title={<span><Icon type="user" />{subnav.title}</span>}>
-            {subnav.options.map((option, index2) => <Menu.Item key={index2}>{option}</Menu.Item>)}
+            {subnav.options.map((option, index2) => (
+              <Menu.Item key={index2} >
+                <Link to={option.router}>{option.name}</Link>
+              </Menu.Item>
+            ))}
           </SubMenu>
-        ))}
+        ))}       
       </Menu>
     </Sider>
+    </HashRouter>
   )
 }
