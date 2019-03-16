@@ -1,7 +1,7 @@
 import * as React from 'react'
 
 
-import { Layout, Form, Input, Select, Button, Tag } from 'antd'
+import { Form, Input, Select, Button, Tag } from 'antd'
 
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
