@@ -1,12 +1,11 @@
-// let merge = require('merge')
+const CleanWebpackPlugin = require('clean-webpack-plugin')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
+
 let base = require('./webpack.base')
 
-let CleanWebpackPlugin = require('clean-webpack-plugin')
-
 base.plugins.push(new CleanWebpackPlugin())
+base.plugins.push(new OptimizeCssAssetsPlugin())
 
-// base.externals = {
-//     "react": "React",
-//     "react-dom": "ReactDOM"
-// }
+base.optimization.minimizer.push(new UglifyJsPlugin())
 module.exports = base

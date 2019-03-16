@@ -8,7 +8,7 @@ import { Layout } from 'antd'
 const { Content } = Layout
 
 
-import 'antd/dist/antd.css'
+// import 'antd/dist/antd.css'
 import './style.css'
 
 let menu = ['Home', 'Menu2', 'Menu3']

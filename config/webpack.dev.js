@@ -1,8 +1,9 @@
-let merge = require('merge')
-let base = require('./webpack.base')
+// const merge = require('merge')
+const path = require('path')
+const base = require('./webpack.base')
 
 // 根路径
-let rootUrl = path.resolve(__dirname, '..')
+const rootUrl = path.resolve(__dirname, '..')
 
 const apiMocker = require('webpack-api-mocker');
 const mocker = path.resolve(rootUrl, 'mock', 'index.js');

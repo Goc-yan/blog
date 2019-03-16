@@ -1,6 +1,8 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
+// const tsImportPluginFactory = require('ts-import-plugin')
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 // 根路径
 let rootUrl = path.resolve(__dirname, '..')
@@ -28,8 +30,13 @@ module.exports = {
     module: {
         rules: [{
             test: /\.tsx?$/,
-            loader: "awesome-typescript-loader"
-
+            loader: "awesome-typescript-loader",
+            // options: {
+            //     getCustomTransformers: () => ({
+            //         before: [tsImportPluginFactory()]
+            //     }),
+            // },
+            exclude: /node_modules/,
         }, {
             test: /\.js$/,
             loader: "source-map-loader",
@@ -51,6 +58,19 @@ module.exports = {
         }
         ]
     },
+    optimization: {
+        minimizer: [],
+        splitChunks: {
+            cacheGroups: {
+                vendor: {
+                    test: /[\\/]node_modules[\\/]/,
+                    name: 'common',
+                    priority: 10,
+                    chunks: 'all'
+                }
+            }
+        }
+    },
     resolve: {
         extensions: [".ts", ".tsx", ".js", ".json"],
         alias: {
@@ -59,25 +79,24 @@ module.exports = {
             '@models': path.resolve(rootUrl, 'src', 'models'),
         },
     },
-    // externals: {
-    //     "react": "React",
-    //     "react-dom": "ReactDOM"
-    // },
+    externals: {},
     plugins: [
         new HtmlWebpackPlugin({
             title: 'blog',
             template: './src/pages/blog/index.html', // 模板路径
             filename: './pages/blog.html', // 输出html文件名称
             inject: 'body',
-            chunks: ['blog']
+            chunks: ['blog', 'common']
         }),
         new HtmlWebpackPlugin({
             title: 'mgr',
             template: './src/pages/blog/index.html', // 模板路径
             filename: './pages/mgr.html', // 输出html文件名称
             inject: 'body',
-            chunks: ['mgr']
+            chunks: ['mgr', 'common']
         }),
         new ExtractTextPlugin("styles/[name].css"),
+        // new BundleAnalyzerPlugin()
     ]
 }
+
