@@ -5,14 +5,15 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin");
 // 根路径
 let rootUrl = path.resolve(__dirname, '..')
 
-const apiMocker = require('webpack-api-mocker');
-const mocker = path.resolve(rootUrl, 'mock', 'index.js');
 
 /**
  * 获取入口文件地址
  * @param { string } filename 
  */
 let entryUrl = filename => path.resolve(rootUrl, 'src', 'pages', filename)
+
+// const isEnvDevelopment = webpackEnv === 'development';
+// const isEnvProduction = webpackEnv === 'production';
 
 module.exports = {
     entry: {
@@ -21,42 +22,33 @@ module.exports = {
     },
     output: {
         path: path.resolve(rootUrl, 'dist'),
-        filename: 'javascripts/[name].[chunkhash].js'
-    },
-    devtool: 'source-map',
-    devServer: {
-        contentBase: './dist',
-        // proxy: {
-        //     "/api": "http://localhost:3000"
-        // },
-        before(app, server) {
-            apiMocker(app, mocker)
-        }
+        filename: 'javascripts/[name].[chunkhash].js',
+        chunkFilename: 'javascripts/[name].[chunkhash].js',
     },
     module: {
         rules: [{
-                test: /\.tsx?$/,
-                loader: "awesome-typescript-loader"
+            test: /\.tsx?$/,
+            loader: "awesome-typescript-loader"
 
-            }, {
-                test: /\.js$/,
-                loader: "source-map-loader",
-                enforce: "pre",
-            }, {
-                test: /\.css$/,
-                use: ExtractTextPlugin.extract({
-                    fallback: "style-loader",
-                    use: "css-loader"
-                })
-            },
-            // {
-            //     test: /\.less$/,
-            //     loader: 'style-loader!css-loader!less-loader'
-            // },
-            {
-                test: /\.(png|svg|jpg|gif)/,
-                use: 'file-loader'
-            }
+        }, {
+            test: /\.js$/,
+            loader: "source-map-loader",
+            enforce: "pre",
+        }, {
+            test: /\.css$/,
+            use: ExtractTextPlugin.extract({
+                fallback: "style-loader",
+                use: "css-loader"
+            })
+        },
+        // {
+        //     test: /\.less$/,
+        //     loader: 'style-loader!css-loader!less-loader'
+        // },
+        {
+            test: /\.(png|svg|jpg|gif)/,
+            use: 'file-loader'
+        }
         ]
     },
     resolve: {
