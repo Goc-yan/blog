@@ -1,5 +1,5 @@
-p {
-    margin-bottom: 0;
+body, p, ul {
+    margin: 0;
 }
 
 ul {
@@ -12,15 +12,13 @@ li {
 }
 
 .clearfix:after {
-    visibility: hidden;
     display: block;
-    font-size: 0;
-    content: ".";
+    content: "";
     clear: both;
     height: 0;
-  }
+}
 
-.clearfix {
-    *zoom: 1;
-    zoom: 1;
+#app {
+    width: 100vw;
+    height: 100vh;
 }

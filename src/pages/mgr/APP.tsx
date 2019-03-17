@@ -1,15 +1,15 @@
 import * as React from 'react'
-import { HashRouter, Router, Route, Link } from 'react-router-dom'
+import { HashRouter, Route } from 'react-router-dom'
 
 import Mgr from '@components/Mgr'
 
 import { Layout } from 'antd'
 
-const { Content } = Layout
 
-
-// import 'antd/dist/antd.css'
+import '../../styles/reset.css'
 import './style.css'
+
+const { Content } = Layout
 
 let menu = ['Home', 'Menu2', 'Menu3']
 let subMenu = [{
@@ -42,18 +42,19 @@ let subMenu = [{
 }]
 let breadcrumb = ['Home', 'List', 'App']
 
-class App extends React.Component {
+export default class App extends React.Component {
 
     render() {
+        console.log('hello mgr')
         return (
             <>
-                <Layout tagName="section">
+                <Layout>
                     <Mgr.Header data={menu} />
-                    <Layout tagName="section">
+                    <Layout>
                         <Mgr.SubMenu data={subMenu} />
-                        <Layout tagName="section" className="content-wrapper">
+                        <Layout className="content-wrapper">
                             <Mgr.Breadcrumb data={breadcrumb} />
-                            <Content tagName="main" className="content">
+                            <Content  className="content">
                                 <HashRouter>
                                     <>
                                         <Route path="/" exact={true} component={Mgr.Articles}></Route>
@@ -68,5 +69,3 @@ class App extends React.Component {
         )
     }
 }
-
-export default App

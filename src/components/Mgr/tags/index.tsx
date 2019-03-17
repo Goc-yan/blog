@@ -5,7 +5,6 @@ import { $get } from '@utils/ajax'
 
 import { Tag, Input, Tooltip, Icon, } from 'antd'
 
-import "antd/dist/antd.css"
 
 interface State {
   tags: string[]

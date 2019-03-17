@@ -7,7 +7,6 @@ import { $get, $post } from '@utils/ajax'
 
 import { Button, Icon, Table } from 'antd'
 
-import "antd/dist/antd.css"
 import './style.css'
 
 interface State {
@@ -89,7 +88,6 @@ class Header extends React.Component<object, State> {
   }
 
   componentDidMount() {
-    console.log('componentDidMount')
     this.getData()
   }
 
@@ -107,25 +105,25 @@ class Header extends React.Component<object, State> {
           {
             this.state.isEditor
               ? <Button
-                  className="float-right"
-                  onClick={this.switchEditState} >
-                  <Icon type="left" />返回
+                className="float-right"
+                onClick={this.switchEditState} >
+                <Icon type="left" />返回
                 </Button>
               : <>
-                  <Button
-                    className="float-right margin-left-20"
-                    type="danger"
-                    disabled={this.state.selectedRowKeys.length === 0}
-                    onClick={this.delete} >
-                    <Icon type="delete" /> 删除
+                <Button
+                  className="float-right margin-left-20"
+                  type="danger"
+                  disabled={this.state.selectedRowKeys.length === 0}
+                  onClick={this.delete} >
+                  <Icon type="delete" /> 删除
                   </Button>
-                  <Button
-                    className="float-right"
-                    type="primary"
-                    onClick={this.switchEditState} >
-                    <Icon type="plus" />新增
+                <Button
+                  className="float-right"
+                  type="primary"
+                  onClick={this.switchEditState} >
+                  <Icon type="plus" />新增
                   </Button>
-                </>
+              </>
           }
         </div>
         {

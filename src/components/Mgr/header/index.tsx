@@ -10,7 +10,7 @@ interface Prop {
 
 export default function (prop: Prop) {
   return (
-    <Header tagName="header">
+    <Header>
       <div className="logo" />
       <Menu
         theme="dark"

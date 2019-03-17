@@ -26,7 +26,7 @@ export default function (prop: Prop) {
   return (
     <HashRouter>
       
-    <Sider width={200} className="bg-fff">
+    <Sider width={200} style={{ background: '#fff' }}>
       <Menu
         className="menu"
         mode="inline"

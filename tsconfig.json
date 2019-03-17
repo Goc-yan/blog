@@ -9,12 +9,12 @@
         "baseUrl": ".",
         "paths": {
             "@components/*": [ "./src/components/*" ],
-            "@utils/*": [ "./src/utils/*" ],
             "@models": [ "./src/models" ],
+            "@utils/*": [ "./src/utils/*" ],
         }
     },
     "include": [
         "./src/**/*"
     ],
-    "module": "ESNext",
+    // "module": "ESNext",
 }

@@ -1,6 +1,4 @@
 import * as React from 'react'
-import { Row, Col } from 'antd';
-import "antd/dist/antd.css";
 
 import './style.css'
 
@@ -41,20 +39,15 @@ export default class Home extends React.Component<object, State> {
   }
 
   componentDidMount() {
-    console.log('componentDidMount')
     this.getData()
   }
 
   render() {
     return (
       <div className="body">
-        <Row>
-          <Col span={20} offset={2}>
-            <ul className="list-wrapper">
-              {this.state.list.map((data, index) => <li key={index}><a href="#">{data.title}</a></li>)}
-            </ul>
-          </Col>
-        </Row>
+        <ul className="list-wrapper">
+          {this.state.list.map((data, index) => <li key={index}><a href="#">{data.title}</a></li>)}
+        </ul>
       </div>
     )
   }
