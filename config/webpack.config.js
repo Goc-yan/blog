@@ -31,7 +31,7 @@ module.exports = function (env, argv) {
     const isDev = argv.mode === 'development'
     const isProd = argv.mode === 'production'
 
-    
+
     let config = {
         mode: argv.mode,
         entry: {
@@ -42,6 +42,7 @@ module.exports = function (env, argv) {
             path: path.resolve(rootUrl, 'dist'),
             filename: 'javascripts/[name].[chunkhash:8].js',
             chunkFilename: 'javascripts/[name].[chunkhash:8].js',
+            publicPath: '/',
         },
         devtool: isDev ? 'source-map' : false,
         devServer: devServer(isDev),
@@ -60,6 +61,15 @@ module.exports = function (env, argv) {
                     isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
                     'css-loader',
                 ]
+            }, {
+                test: /\.(png|svg|jpg|gif)/,
+                use: [{
+                    loader: 'url-loader',
+                    options: {
+                        limit: 8192,
+                        name: 'images/[name].[hash:7].[ext]'
+                    }
+                }]
             }]
         },
         resolve: {
@@ -82,8 +92,7 @@ module.exports = function (env, argv) {
                 new UglifyJsPlugin(),
                 new OptimizeCSSAssetsPlugin({})
             ],
-            splitChunks: {
-            }
+            splitChunks: {}
         },
         plugins: [
             new HtmlWebpackPlugin({

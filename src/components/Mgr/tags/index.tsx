@@ -1,15 +1,20 @@
 import * as React from 'react'
 
-import { ResData, Article } from '@models'
-import { $get } from '@utils/ajax'
 
-import { Tag, Input, Tooltip, Icon, } from 'antd'
+import { TableColumn, ResData, Article } from '@models'
+import { $get, $post } from '@utils/ajax'
 
+import { Modal, Button, Icon, Table } from 'antd'
+
+import './style.css'
 
 interface State {
-  tags: string[]
-  inputVisible: boolean
-  inputValue: string
+  data: Article[]
+  selectedRowKeys: number[]
+  columns: TableColumn[]
+  loading: boolean
+  visible: boolean
+  submitting: boolean
 }
 
 interface resArticles extends ResData {
@@ -18,94 +23,156 @@ interface resArticles extends ResData {
 
 class Header extends React.Component<object, State> {
 
-  private input?: any;
-
   constructor(prop: object) {
     super(prop)
 
     this.state = {
-      tags: ['tag 1', 'tag 2', 'tag 3', 'tag 4'],
-      inputVisible: false,
-      inputValue: '',
+      data: [],
+      selectedRowKeys: [],
+      columns: [{
+        title: 'ID',
+        dataIndex: 'id',
+        width: 10,
+      }, {
+        title: '标签名称',
+        dataIndex: 'title',
+        width: 800,
+      }, {
+        title: '操作',
+        key: 'operation',
+        width: 100,
+        render: (text: string, record: string) => (
+          <span>
+            <a href="javascript:;">编辑</a>
+          </span>
+        ),
+      }],
+      loading: false,
+      visible: false,
+      submitting: false,
     }
 
-    this.saveInputRef = this.saveInputRef.bind(this)
-    this.showInput = this.showInput.bind(this)
+    this.onSelectChange = this.onSelectChange.bind(this)
+    this.delete = this.delete.bind(this)
+    this.showModal = this.showModal.bind(this)
+    this.handleOk = this.handleOk.bind(this)
+    this.handleCancel = this.handleCancel.bind(this)
+  }
+
+  getData() {
+
+    let _this = this
+    $get('/api/articles/list', function (resData: resArticles): void {
+      // _this.setState({
+      //   data: [...resData.data]
+      // })
+      _this.setState({
+        data: [{
+          id: 1,
+          title: 'javascript'
+        }, {
+          id: 2,
+          title: 'python'
+        }]
+      })
+    })
+
 
   }
 
-  private handleClose = (removedTag: any) => {
-    const tags = this.state.tags.filter(tag => tag !== removedTag);
-    console.log(tags);
-    this.setState({ tags });
-  }
+  delete() {
 
-  private showInput = () => {
-    this.setState({ inputVisible: true }, () => this.input.focus());
-  }
-
-  private handleInputChange = (e: any) => {
-    this.setState({ inputValue: e.target.value });
-  }
-
-  private handleInputConfirm = () => {
-    const state = this.state;
-    const inputValue = state.inputValue;
-    let tags = state.tags;
-    if (inputValue && tags.indexOf(inputValue) === -1) {
-      tags = [...tags, inputValue];
+    let _this = this
+    let options = {
+      data: this.state.selectedRowKeys
     }
-    console.log(tags);
+
+    $post('/api/articles/delete', options, function (resData: ResData): void {
+      console.log(resData)
+    })
+  }
+
+  onSelectChange(selectedRowKeys: number[]): void {
+    console.log('selectedRowKeys changed: ', selectedRowKeys)
+    this.setState({ selectedRowKeys })
+  }
+
+  showModal = () => {
     this.setState({
-      tags,
-      inputVisible: false,
-      inputValue: '',
-    });
+      visible: true,
+    })
   }
 
-  private saveInputRef(input: object) {
+  handleOk = () => {
+    this.setState({ loading: true, submitting: true  })
+    setTimeout(() => {
+      this.setState({ 
+        loading: false, 
+        visible: false,
+        submitting: false 
+      })
+    }, 3000)
+  }
 
-    this.input = input
+  handleCancel = () => {
+    this.setState({ visible: false })
   }
 
   componentDidMount() {
-    console.log('componentDidMount')
+    this.getData()
   }
 
   render() {
 
-    const { tags, inputVisible, inputValue } = this.state;
+    const { 
+      selectedRowKeys, 
+      visible, 
+      loading, 
+      submitting 
+    } = this.state
+
+    const rowSelection = { selectedRowKeys, onChange: this.onSelectChange }
+
+
     return (
-      <div>
-        {tags.map((tag, index) => {
-          const isLongTag = tag.length > 20;
-          const tagElem = (
-            <Tag key={tag} closable={true} afterClose={() => this.handleClose(tag)}>
-              {isLongTag ? `${tag.slice(0, 20)}...` : tag}
-            </Tag>
-          );
-          return isLongTag ? <Tooltip title={tag} key={tag}>{tagElem}</Tooltip> : tagElem;
-        })}
-        {inputVisible && (
-          <Input
-            ref={this.saveInputRef}
-            type="text"
-            size="small"
-            style={{ width: 78 }}
-            value={inputValue}
-            onChange={this.handleInputChange}
-            onBlur={this.handleInputConfirm}
-            onPressEnter={this.handleInputConfirm}
-          />
-        )}
-        {!inputVisible && (
-          <Tag
-            onClick={this.showInput}
-            style={{ background: '#fff', borderStyle: 'dashed' }}
-          >
-            <Icon type="plus" /> New Tag
-          </Tag>
-        )}
+      <div className="body">
+        <div className="btn-group">
+          <Button
+            className="float-right margin-left-20"
+            type="danger"
+            disabled={this.state.selectedRowKeys.length === 0}
+            onClick={this.delete} >
+            <Icon type="delete" /> 删除
+          </Button>
+          <Button
+            className="float-right"
+            type="primary"
+            onClick={this.showModal} >
+            <Icon type="plus" />新增
+          </Button>
+        </div>
+        <Table rowKey={record => record.id.toString()}
+          rowSelection={rowSelection}
+          columns={this.state.columns}
+          dataSource={this.state.data} />
+        <Modal
+          visible={visible}
+          title="新增标签"
+          onOk={this.handleOk}
+          onCancel={this.handleCancel}
+          footer={[
+            <Button key="back" onClick={this.handleCancel} disabled={submitting}>取消</Button>,
+            <Button key="submit" type="primary" loading={loading} onClick={this.handleOk}>
+              提交
+            </Button>,
+          ]}
+        >
+          <p>Some contents...</p>
+          <p>Some contents...</p>
+          <p>Some contents...</p>
+          <p>Some contents...</p>
+          <p>Some contents...</p>
+        </Modal>
       </div>
     )
   }

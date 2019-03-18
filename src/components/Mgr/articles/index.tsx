@@ -37,12 +37,12 @@ class Header extends React.Component<object, State> {
         dataIndex: 'title',
         width: 800,
       }, {
-        title: 'Action',
+        title: '操作',
         key: 'operation',
-        width: 50,
+        width: 100,
         render: (text: string, record: string) => (
           <span>
-            <a href="javascript:;">editor</a>
+            <a href="javascript:;">编辑</a>
           </span>
         ),
       }],
