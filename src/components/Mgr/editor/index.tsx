@@ -8,6 +8,8 @@ import 'react-quill/dist/quill.snow.css'
 
 import './style.css'
 
+import { Article } from '@models'
+
 const { Option } = Select
 const CheckableTag = Tag.CheckableTag
 
@@ -22,11 +24,18 @@ interface State {
   formats: string[]
 }
 
-class RegistrationForm extends React.Component<any, State> {
+interface Prop {
+  data: Article
+  form: any
+}
 
-  constructor(prop: any) {
+class RegistrationForm extends React.Component<Prop, State> {
+
+  constructor(prop: Prop) {
 
     super(prop)
+
+    console.log(prop)
     this.state = {
       confirmDirty: false,
       autoCompleteResult: [],
@@ -98,6 +107,7 @@ class RegistrationForm extends React.Component<any, State> {
       <Form {...formItemLayout} onSubmit={this.handleSubmit}>
         <Form.Item label="标题" >
           {getFieldDecorator('title', {
+            initialValue: this.props.data.title,
             rules: [{
               required: true, message: 'Please input article title',
             }],
@@ -126,7 +136,7 @@ class RegistrationForm extends React.Component<any, State> {
             theme="snow"
             modules={this.state.modules}
             formats={this.state.formats}
-            value={this.state.text}
+            value={this.props.data.content}
             onChange={this.handleRichChange} />
         </Form.Item>
         <Form.Item {...tailFormItemLayout}>

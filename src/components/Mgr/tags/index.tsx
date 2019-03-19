@@ -63,17 +63,8 @@ class Header extends React.Component<object, State> {
 
     let _this = this
     $get('/api/articles/list', function (resData: resArticles): void {
-      // _this.setState({
-      //   data: [...resData.data]
-      // })
       _this.setState({
-        data: [{
-          id: 1,
-          title: 'javascript'
-        }, {
-          id: 2,
-          title: 'python'
-        }]
+        data: [...resData.data]
       })
     })
 

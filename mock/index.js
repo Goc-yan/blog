@@ -6,11 +6,13 @@ const proxy = {
             errCode: 0,
             data: [{
                     id: 2,
-                    title: 'webpack简易上手指南'
+                    title: 'webpack简易上手指南',
+                    content: '内容'
                 },
                 {
                     id: 3,
-                    title: '谈谈跨域'
+                    title: '谈谈跨域',
+                    content: '内容'
                 }
             ]
         }

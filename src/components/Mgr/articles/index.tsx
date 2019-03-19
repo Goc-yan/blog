@@ -14,10 +14,15 @@ interface State {
   selectedRowKeys: number[]
   columns: TableColumn[]
   isEditor: boolean
+  article: Article
 }
 
 interface resArticles extends ResData {
   data: Article[]
+}
+
+interface SwitchEditState {
+  (id?: number): void
 }
 
 class Header extends React.Component<object, State> {
@@ -40,13 +45,19 @@ class Header extends React.Component<object, State> {
         title: '操作',
         key: 'operation',
         width: 100,
-        render: (text: string, record: string) => (
-          <span>
-            <a href="javascript:;">编辑</a>
-          </span>
-        ),
+        render: (text: any, record: any) => {
+          return (
+            <span>
+              <a href="javascript:;" onClick={this.switchEditState.bind(this, record.id)}>编辑</a>
+            </span>
+          )
+        },
       }],
       isEditor: false,
+      article: {
+        title: '',
+        content: ''
+      }
     }
 
     this.onSelectChange = this.onSelectChange.bind(this);
@@ -54,6 +65,10 @@ class Header extends React.Component<object, State> {
     this.delete = this.delete.bind(this);
   }
 
+  // 修改文章
+
+
+  // 获取文章列表
   getData() {
 
     let _this = this
@@ -64,6 +79,20 @@ class Header extends React.Component<object, State> {
     })
   }
 
+  // 新增文章
+  addArticle() {
+
+    let _this = this
+    let data = {
+      title: '标题',
+      content: '内容'
+    }
+    $post('/api/articles/add', data, function (resData: ResData) {
+      console.log(resData)
+    })
+  }
+
+  // 删除文章
   delete() {
 
     let _this = this
@@ -72,16 +101,27 @@ class Header extends React.Component<object, State> {
     }
 
     $post('/api/articles/delete', options, function (resData: ResData): void {
-      console.log(resData);
+      console.log(resData)
     })
   }
 
-  switchEditState() {
+  // 切换编辑状态
+  switchEditState(id: any) {
+
+    let article
+    if (typeof id === 'number') {
+      article = this.state.data.filter(item => item.id === id)[0]
+    }
+
+    if (!article) article = this.state.article
+
     this.setState({
-      isEditor: !this.state.isEditor
+      isEditor: !this.state.isEditor,
+      article
     })
   }
 
+  // 复选框
   onSelectChange(selectedRowKeys: number[]): void {
     console.log('selectedRowKeys changed: ', selectedRowKeys);
     this.setState({ selectedRowKeys });
@@ -128,7 +168,7 @@ class Header extends React.Component<object, State> {
         </div>
         {
           this.state.isEditor
-            ? <Mgr.Editor />
+            ? <Mgr.Editor data={this.state.article} />
             : <Table rowKey={record => record.id.toString()}
               rowSelection={rowSelection}
               columns={this.state.columns}
