@@ -19,13 +19,13 @@ interface State {
   confirmDirty: boolean
   autoCompleteResult: string[]
   selectedTags: string[]
-  text?: any
   modules: any
   formats: string[]
 }
 
 interface Prop {
   data: Article
+  updateFn: any
   form: any
 }
 
@@ -35,12 +35,10 @@ class RegistrationForm extends React.Component<Prop, State> {
 
     super(prop)
 
-    console.log(prop)
     this.state = {
       confirmDirty: false,
       autoCompleteResult: [],
       selectedTags: [],
-      text: '',
       modules: {
         toolbar: [
           [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
@@ -59,7 +57,6 @@ class RegistrationForm extends React.Component<Prop, State> {
     }
 
     this.handleChange = this.handleChange.bind(this)
-    this.handleRichChange = this.handleRichChange.bind(this)
   }
 
   handleSubmit = (e: any) => {
@@ -68,13 +65,16 @@ class RegistrationForm extends React.Component<Prop, State> {
 
       if (!err) {
         console.log('Received values of form: ', values)
+
+        let id = this.props.data.id
+
+        if (id) {
+          console.log('update')
+        } else {
+          console.log('add')
+        }
       }
     })
-  }
-
-  handleConfirmBlur = (e: any) => {
-    const value = e.target.value
-    this.setState({ confirmDirty: this.state.confirmDirty || !!value })
   }
 
   handleChange(tag: string, checked: boolean) {
@@ -84,10 +84,6 @@ class RegistrationForm extends React.Component<Prop, State> {
       ? [...selectedTags, tag]
       : selectedTags.filter(t => t !== tag)
     this.setState({ selectedTags: nextSelectedTags })
-  }
-
-  handleRichChange(value: any): void {
-    this.setState({ text: value })
   }
 
   componentWillMount() { }
@@ -103,41 +99,45 @@ class RegistrationForm extends React.Component<Prop, State> {
       wrapperCol: { span: 3, offset: 12 },
     }
 
+    let { title, content } = this.props.data
+
     return (
       <Form {...formItemLayout} onSubmit={this.handleSubmit}>
         <Form.Item label="标题" >
           {getFieldDecorator('title', {
-            initialValue: this.props.data.title,
+            initialValue: title,
             rules: [{
               required: true, message: 'Please input article title',
             }],
           })(<Input />)}
         </Form.Item>
         <Form.Item label="分类" >
-          <Select defaultValue="1">
-            <Option value="1">Option 1</Option>
-            <Option value="2">Option 2</Option>
-            <Option value="3">Option 3</Option>
-          </Select>
+          {getFieldDecorator('category', {
+            initialValue: '1',
+          })(<Select>
+              <Option value="1">随笔</Option>
+              <Option value="2">技术</Option>
+              <Option value="3">没了</Option>
+            </Select>)}
         </Form.Item>
         <Form.Item label="标签" >
           {tagsFromServer.map(tag => (
             <CheckableTag
               key={tag}
               checked={this.state.selectedTags.indexOf(tag) > -1}
-              onChange={checked => this.handleChange(tag, checked)}
-            >
+              onChange={checked => this.handleChange(tag, checked)}>
               {tag}
             </CheckableTag>
           ))}
         </Form.Item>
         <Form.Item label="正文">
-          <ReactQuill
+          {getFieldDecorator('content', {
+            initialValue: content,
+          })(<ReactQuill
             theme="snow"
             modules={this.state.modules}
-            formats={this.state.formats}
-            value={this.props.data.content}
-            onChange={this.handleRichChange} />
+            formats={this.state.formats} />)
+          }
         </Form.Item>
         <Form.Item {...tailFormItemLayout}>
           <Button type="primary" htmlType="submit">保存</Button>

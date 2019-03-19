@@ -21,10 +21,6 @@ interface resArticles extends ResData {
   data: Article[]
 }
 
-interface SwitchEditState {
-  (id?: number): void
-}
-
 class Header extends React.Component<object, State> {
 
   constructor(prop: object) {
@@ -105,15 +101,34 @@ class Header extends React.Component<object, State> {
     })
   }
 
+  updateArticle() {
+
+    console.log('updateArticle')
+    return
+
+    let _this = this
+    let data = {
+      id: 2,
+      title: '标题',
+      content: '内容',
+    }
+    $post('/api/articles/update', data, function (resData: ResData) {
+      console.log(resData)
+    })
+  }
+
   // 切换编辑状态
   switchEditState(id: any) {
 
-    let article
-    if (typeof id === 'number') {
-      article = this.state.data.filter(item => item.id === id)[0]
-    }
+    let state: boolean
+    let article: Article
 
-    if (!article) article = this.state.article
+    state = this.state.isEditor
+    article = { id: null, title: '', content: '' }
+
+    if (!state) {
+      article = typeof id === 'number' ? this.state.data.filter(item => item.id === id)[0] : article
+    }
 
     this.setState({
       isEditor: !this.state.isEditor,
@@ -168,7 +183,7 @@ class Header extends React.Component<object, State> {
         </div>
         {
           this.state.isEditor
-            ? <Mgr.Editor data={this.state.article} />
+            ? <Mgr.Editor data={this.state.article} updateFn={this.updateArticle} />
             : <Table rowKey={record => record.id.toString()}
               rowSelection={rowSelection}
               columns={this.state.columns}

@@ -17,7 +17,7 @@ export interface TableColumn {
 }
 
 export interface Article {
-    id?: number
+    id?: number | null
     title: string
     content: string
 }
