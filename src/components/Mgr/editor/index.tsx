@@ -8,7 +8,7 @@ import 'react-quill/dist/quill.snow.css'
 
 import './style.css'
 
-import { Article } from '@models'
+import { IArticle } from '@models'
 
 const { Option } = Select
 const CheckableTag = Tag.CheckableTag
@@ -24,9 +24,10 @@ interface State {
 }
 
 interface Prop {
-  data: Article
-  updateFn: any
+  data: IArticle
   form: any
+  update: any
+  add: any
 }
 
 class RegistrationForm extends React.Component<Prop, State> {
@@ -59,20 +60,16 @@ class RegistrationForm extends React.Component<Prop, State> {
     this.handleChange = this.handleChange.bind(this)
   }
 
-  handleSubmit = (e: any) => {
+  handleSubmit = (e: any): void => {
     e.preventDefault()
     this.props.form.validateFieldsAndScroll((err: string, values: object) => {
 
       if (!err) {
-        console.log('Received values of form: ', values)
 
-        let id = this.props.data.id
+        let { update, add, data } = this.props
+        let { id } = data
 
-        if (id) {
-          console.log('update')
-        } else {
-          console.log('add')
-        }
+        id ? update({ id, ...values }) : add(values)
       }
     })
   }
@@ -115,20 +112,25 @@ class RegistrationForm extends React.Component<Prop, State> {
           {getFieldDecorator('category', {
             initialValue: '1',
           })(<Select>
-              <Option value="1">随笔</Option>
-              <Option value="2">技术</Option>
-              <Option value="3">没了</Option>
-            </Select>)}
+            <Option value="1">随笔</Option>
+            <Option value="2">技术</Option>
+            <Option value="3">没了</Option>
+          </Select>)}
         </Form.Item>
         <Form.Item label="标签" >
-          {tagsFromServer.map(tag => (
-            <CheckableTag
-              key={tag}
-              checked={this.state.selectedTags.indexOf(tag) > -1}
-              onChange={checked => this.handleChange(tag, checked)}>
-              {tag}
-            </CheckableTag>
-          ))}
+          {getFieldDecorator('tag', {
+            initialValue: this.state.selectedTags
+          })(<>
+              {tagsFromServer.map(tag => (
+                <CheckableTag
+                  key={tag}
+                  checked={this.state.selectedTags.indexOf(tag) > -1}
+                  onChange={checked => this.handleChange(tag, checked)}>
+                  {tag}
+                </CheckableTag>
+              ))}
+            </>)
+          }
         </Form.Item>
         <Form.Item label="正文">
           {getFieldDecorator('content', {

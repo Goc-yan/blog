@@ -2,26 +2,16 @@ import * as React from 'react'
 
 import Mgr from '@components/Mgr'
 
-import { TableColumn, ResData, Article } from '@models'
-import { $get, $post } from '@utils/ajax'
-
 import { Button, Icon, Table } from 'antd'
+
+import * as ajax from '@utils/ajax'
+
+import { IResData, IArticle } from '@models'
+import { IState, IResArticles } from './models'
 
 import './style.css'
 
-interface State {
-  data: Article[]
-  selectedRowKeys: number[]
-  columns: TableColumn[]
-  isEditor: boolean
-  article: Article
-}
-
-interface resArticles extends ResData {
-  data: Article[]
-}
-
-class Header extends React.Component<object, State> {
+class Header extends React.Component<object, IState> {
 
   constructor(prop: object) {
     super(prop)
@@ -61,14 +51,11 @@ class Header extends React.Component<object, State> {
     this.delete = this.delete.bind(this);
   }
 
-  // 修改文章
-
-
   // 获取文章列表
   getData() {
 
     let _this = this
-    $get('/api/articles/list', function (resData: resArticles): void {
+    ajax.$get('/api/articles', function (resData: IResArticles): void {
       _this.setState({
         data: [...resData.data]
       })
@@ -76,14 +63,10 @@ class Header extends React.Component<object, State> {
   }
 
   // 新增文章
-  addArticle() {
+  addArticle(data: IArticle) {
 
     let _this = this
-    let data = {
-      title: '标题',
-      content: '内容'
-    }
-    $post('/api/articles/add', data, function (resData: ResData) {
+    ajax.$post('/api/articles', data, function (resData: IResData) {
       console.log(resData)
     })
   }
@@ -96,23 +79,16 @@ class Header extends React.Component<object, State> {
       data: this.state.selectedRowKeys
     }
 
-    $post('/api/articles/delete', options, function (resData: ResData): void {
+    ajax.$delete('/api/articles', options, function (resData: IResData): void {
       console.log(resData)
     })
   }
 
-  updateArticle() {
-
-    console.log('updateArticle')
-    return
+  // 更新文章
+  updateArticle(data: IArticle) {
 
     let _this = this
-    let data = {
-      id: 2,
-      title: '标题',
-      content: '内容',
-    }
-    $post('/api/articles/update', data, function (resData: ResData) {
+    ajax.$put('/api/articles', data, function (resData: IResData) {
       console.log(resData)
     })
   }
@@ -121,7 +97,7 @@ class Header extends React.Component<object, State> {
   switchEditState(id: any) {
 
     let state: boolean
-    let article: Article
+    let article: IArticle
 
     state = this.state.isEditor
     article = { id: null, title: '', content: '' }
@@ -183,7 +159,7 @@ class Header extends React.Component<object, State> {
         </div>
         {
           this.state.isEditor
-            ? <Mgr.Editor data={this.state.article} updateFn={this.updateArticle} />
+            ? <Mgr.Editor data={this.state.article} update={this.updateArticle} add={this.addArticle} />
             : <Table rowKey={record => record.id.toString()}
               rowSelection={rowSelection}
               columns={this.state.columns}

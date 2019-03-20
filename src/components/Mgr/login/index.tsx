@@ -1,18 +1,18 @@
 import * as React from 'react'
 import { Form, Icon, Input, Button, Checkbox } from 'antd';
 
-import { TableColumn, ResData, Article } from '@models'
+import { IResData, IArticle } from '@models'
 import { $get, $post } from '@utils/ajax'
 
 
 import './style.css'
 
 interface State {
-  data: Article[]
+  data: IArticle[]
 }
 
-interface resArticles extends ResData {
-  data: Article[]
+interface resArticles extends IResData {
+  data: IArticle[]
 }
 
 function hasErrors(fieldsError: any) {

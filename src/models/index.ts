@@ -2,13 +2,14 @@ export interface Obj {
     [propName: string]: any
 }
 
-export interface ResData {
+export interface IResData {
     errCode: number
+    msg?: string
+    data?: any[]
     errMsg?: string
-    data: any[]
 }
 
-export interface TableColumn {
+export interface ITableColumn {
     title: string,
     width: number,
     key?: string,
@@ -16,8 +17,13 @@ export interface TableColumn {
     render?: any
 }
 
-export interface Article {
+export interface IArticle {
     id?: number | null
     title: string
     content: string
+}
+
+export interface ITag {
+    id: number | null
+    tagName: string
 }

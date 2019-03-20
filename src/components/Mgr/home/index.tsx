@@ -4,10 +4,10 @@ import { HashRouter, Route, Switch, Redirect } from 'react-router-dom'
 import Mgr from '@components/Mgr'
 
 import { Layout } from 'antd'
+const { Content } = Layout
 
 import './style.css'
 
-const { Content } = Layout
 
 let menu = ['Home', 'Menu2', 'Menu3']
 let subMenu = [{

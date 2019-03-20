@@ -1,12 +1,9 @@
 import * as React from 'react'
 
 import { Layout, Menu, } from 'antd';
-
 const { Header } = Layout;
 
-interface Prop {
-  data: string[]
-}
+import { Prop } from './models'
 
 export default function (prop: Prop) {
   return (

@@ -13,6 +13,30 @@ let urlStringify = function (obj: Obj): string {
     return '?' + list.join('&')
 }
 
+let $post = function (url: string, options: object, callback: Function): void {
+
+    axios.post(url, options)
+        .then(response => callback(response.data))
+        .catch(error => console.log(error))
+}
+
+let $delete = function (url: string, ...arg: any[]): void {
+
+    let params = typeof arg[0] === 'object' ? urlStringify(arg[0]) : ''
+    let callback = typeof arg[0] === 'function' ? arg[0] : arg[1]
+
+    axios.delete(url + params)
+        .then(response => callback(response.data))
+        .catch(error => console.log(error))
+}
+
+let $put = function (url: string, options: object, callback: Function): void {
+
+    axios.put(url, options)
+        .then(response => callback(response.data))
+        .catch(error => console.log(error))
+}
+
 let $get = function (url: string, ...arg: any[]): void {
 
     let params = typeof arg[0] === 'object' ? urlStringify(arg[0]) : ''
@@ -23,14 +47,9 @@ let $get = function (url: string, ...arg: any[]): void {
         .catch(error => console.log(error))
 }
 
-let $post = function (url: string, options: object, callback: Function) {
-
-    axios.post(url, options)
-        .then(response => callback(response.data))
-        .catch(error => console.log(error))
-}
-
 export {
-    $get,
     $post,
+    $delete,
+    $put,
+    $get,
 }

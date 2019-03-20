@@ -1,24 +1,28 @@
 import * as React from 'react'
 
 
-import { TableColumn, ResData, Article } from '@models'
-import { $get, $post } from '@utils/ajax'
+import { ITableColumn, IResData, IArticle } from '@models'
+import { ITag } from '@models'
+import Editor from '@components/Mgr/tags/editor'
+import * as ajax from '@utils/ajax'
 
 import { Modal, Button, Icon, Table } from 'antd'
 
 import './style.css'
 
+
 interface State {
-  data: Article[]
+  data: IArticle[]
   selectedRowKeys: number[]
-  columns: TableColumn[]
+  columns: ITableColumn[]
   loading: boolean
   visible: boolean
   submitting: boolean
+  editorTag: ITag
 }
 
-interface resArticles extends ResData {
-  data: Article[]
+interface resArticles extends IResData {
+  data: IArticle[]
 }
 
 class Header extends React.Component<object, State> {
@@ -35,7 +39,7 @@ class Header extends React.Component<object, State> {
         width: 10,
       }, {
         title: '标签名称',
-        dataIndex: 'title',
+        dataIndex: 'tagName',
         width: 800,
       }, {
         title: '操作',
@@ -50,6 +54,10 @@ class Header extends React.Component<object, State> {
       loading: false,
       visible: false,
       submitting: false,
+      editorTag: {
+        id: null,
+        tagName: 'test'
+      }
     }
 
     this.onSelectChange = this.onSelectChange.bind(this)
@@ -62,13 +70,23 @@ class Header extends React.Component<object, State> {
   getData() {
 
     let _this = this
-    $get('/api/articles/list', function (resData: resArticles): void {
+    ajax.$get('/api/tags', function (resData: resArticles): void {
       _this.setState({
         data: [...resData.data]
       })
     })
+  }
 
+  addTag() {
 
+    let _this = this
+    let options = {
+      data: this.state.selectedRowKeys
+    }
+
+    ajax.$post('/api/tags', options, function (resData: IResData): void {
+      console.log(resData)
+    })
   }
 
   delete() {
@@ -78,7 +96,19 @@ class Header extends React.Component<object, State> {
       data: this.state.selectedRowKeys
     }
 
-    $post('/api/articles/delete', options, function (resData: ResData): void {
+    ajax.$delete('/api/tags', options, function (resData: IResData): void {
+      console.log(resData)
+    })
+  }
+
+  updateTag() {
+
+    let _this = this
+    let options = {
+      data: this.state.selectedRowKeys
+    }
+
+    ajax.$put('/api/tags', options, function (resData: IResData): void {
       console.log(resData)
     })
   }
@@ -95,12 +125,12 @@ class Header extends React.Component<object, State> {
   }
 
   handleOk = () => {
-    this.setState({ loading: true, submitting: true  })
+    this.setState({ loading: true, submitting: true })
     setTimeout(() => {
-      this.setState({ 
-        loading: false, 
+      this.setState({
+        loading: false,
         visible: false,
-        submitting: false 
+        submitting: false
       })
     }, 3000)
   }
@@ -115,15 +145,15 @@ class Header extends React.Component<object, State> {
 
   render() {
 
-    const { 
-      selectedRowKeys, 
-      visible, 
-      loading, 
-      submitting 
+    const {
+      selectedRowKeys,
+      visible,
+      loading,
+      submitting,
+      editorTag
     } = this.state
 
     const rowSelection = { selectedRowKeys, onChange: this.onSelectChange }
-
 
     return (
       <div className="body">
@@ -158,11 +188,7 @@ class Header extends React.Component<object, State> {
             </Button>,
           ]}
         >
-          <p>Some contents...</p>
-          <p>Some contents...</p>
-          <p>Some contents...</p>
-          <p>Some contents...</p>
-          <p>Some contents...</p>
+          <Editor data={editorTag} />
         </Modal>
       </div>
     )

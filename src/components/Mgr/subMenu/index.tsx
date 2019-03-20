@@ -3,27 +3,12 @@ import { HashRouter, Link } from 'react-router-dom'
 
 
 import { Layout, Menu, Icon } from 'antd';
-
-
 const { SubMenu } = Menu;
 const { Sider } = Layout;
 
-interface Option {
-  router: string
-  name: string
-}
+import { INav, IProp } from './models'
 
-interface Nav {
-  title: string
-  options: Option[]
-}
-
-interface Prop {
-  data: Nav[]
-}
-
-
-let getNavIndex = function (list: Nav[], name: string) {
+let getNavIndex = function (list: INav[], name: string): string {
   for (let i1 in list) {
     let fn = list[i1]
     for (let i2 in fn.options) {
@@ -33,7 +18,7 @@ let getNavIndex = function (list: Nav[], name: string) {
   }
 }
 
-export default function (prop: Prop) {
+export default function (prop: IProp) {
 
   let url = '/' + window.location.href.split('#/')[1]
   let navIndex = getNavIndex(prop.data, url)
@@ -44,7 +29,7 @@ export default function (prop: Prop) {
         <Menu
           className="menu"
           mode="inline"
-          defaultOpenKeys={['0']} 
+          defaultOpenKeys={['0']}
           defaultSelectedKeys={[navIndex]}>
           {prop.data.map((subnav, index) => (
             <SubMenu key={index} title={<span><Icon type="user" />{subnav.title}</span>}>
