@@ -4,8 +4,9 @@ import Header from './header'
 import SubMenu from './subMenu'
 import Breadcrumb from './breadcrumb'
 import Articles from './articles'
-import Editor from './editor'
 import Tag from './tags'
+import Category from './categorys'
+
 
 export default {
     Home,
@@ -14,6 +15,6 @@ export default {
     SubMenu,
     Breadcrumb,
     Articles,
-    Editor,
     Tag,
+    Category,
 }

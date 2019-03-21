@@ -18,6 +18,9 @@ let subMenu = [{
     }, {
         name: '标签管理',
         router: '/home/tag'
+    }, {
+        name: '分类管理',
+        router: '/home/category'
     }]
 }, {
     title: 'subnav2',
@@ -63,8 +66,10 @@ export default class Component extends React.Component<any> {
                                             path={`${this.props.match.path}/`}
                                             render={() => <Redirect to={`${this.props.match.path}/article`} />}
                                         />
+                                        
                                         <Route exact path={`${this.props.match.path}/article`} component={Mgr.Articles} />
-                                        <Route exact path={`${this.props.match.path}/tag`} component={Mgr.Tag} />                                     */}
+                                        <Route exact path={`${this.props.match.path}/tag`} component={Mgr.Tag} />
+                                        <Route exact path={`${this.props.match.path}/category`} component={Mgr.Category} />
                                     </Switch>
                                 </HashRouter>
                             </Content>

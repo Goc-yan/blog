@@ -1,13 +1,13 @@
 import * as React from 'react'
 
-import Mgr from '@components/Mgr'
+import Editor from './editor'
 
 import { Button, Icon, Table } from 'antd'
 
 import * as ajax from '@utils/ajax'
 
 import { IResData, IArticle } from '@models'
-import { IState, IResArticles } from './models'
+import { IState, IResArticles, IResTags } from './models'
 
 import './style.css'
 
@@ -19,6 +19,7 @@ class Header extends React.Component<object, IState> {
     this.state = {
       data: [],
       selectedRowKeys: [],
+      tags: [],
       columns: [{
         title: 'ID',
         dataIndex: 'id',
@@ -49,6 +50,15 @@ class Header extends React.Component<object, IState> {
     this.onSelectChange = this.onSelectChange.bind(this);
     this.switchEditState = this.switchEditState.bind(this);
     this.delete = this.delete.bind(this);
+  }
+
+  getTags() {
+    let _this = this
+    ajax.$get('/api/tags', function (resData: IResTags): void {
+      _this.setState({
+        tags: [...resData.data]
+      })
+    })
   }
 
   // 获取文章列表
@@ -120,6 +130,7 @@ class Header extends React.Component<object, IState> {
 
   componentDidMount() {
     this.getData()
+    this.getTags()
   }
 
   render() {
@@ -128,7 +139,7 @@ class Header extends React.Component<object, IState> {
     const rowSelection = {
       selectedRowKeys,
       onChange: this.onSelectChange,
-    };
+    }
 
     return (
       <div className="body">
@@ -159,7 +170,7 @@ class Header extends React.Component<object, IState> {
         </div>
         {
           this.state.isEditor
-            ? <Mgr.Editor data={this.state.article} update={this.updateArticle} add={this.addArticle} />
+            ? <Editor tags={this.state.tags} data={this.state.article} update={this.updateArticle} add={this.addArticle} />
             : <Table rowKey={record => record.id.toString()}
               rowSelection={rowSelection}
               columns={this.state.columns}

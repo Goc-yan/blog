@@ -30,16 +30,14 @@ const proxy = {
         var resData = {
             errCode: 0,
             data: [{
-                    id: 2,
-                    title: 'webpack简易上手指南',
-                    content: '内容'
-                },
-                {
-                    id: 3,
-                    title: '谈谈跨域',
-                    content: '内容'
-                }
-            ]
+                id: 2,
+                title: 'webpack简易上手指南',
+                content: '内容'
+            }, {
+                id: 3,
+                title: '谈谈跨域',
+                content: '内容'
+            }]
         }
         res.send(resData)
     },
@@ -74,18 +72,58 @@ const proxy = {
         var resData = {
             errCode: 0,
             data: [{
-                    id: 1,
-                    tagName: 'webpack',
-                },
-                {
-                    id: 2,
-                    tagName: 'node',
-                },
-                {
-                    id: 3,
-                    tagName: 'javascript',
-                }
-            ]
+                id: 1,
+                tagName: 'webpack',
+            }, {
+                id: 2,
+                tagName: 'node',
+            }, {
+                id: 3,
+                tagName: 'javascript',
+            }]
+        }
+        res.send(resData)
+    },
+
+    // 分类
+    'POST /api/categorys': function (req, res) {
+
+        var resData = {
+            errCode: 0,
+            errMsg: '保存成功',
+        }
+        res.send(resData)
+    },
+    'DELETE /api/categorys': function (req, res) {
+
+        var resData = {
+            errCode: 0,
+            errMsg: '删除成功',
+        }
+        res.send(resData)
+    },
+    'PUT /api/categorys': function (req, res) {
+
+        var resData = {
+            errCode: 0,
+            errMsg: '修改成功',
+        }
+        res.send(resData)
+    },
+    'GET /api/categorys': function (req, res) {
+
+        var resData = {
+            errCode: 0,
+            data: [{
+                id: 1,
+                category: '随笔',
+            }, {
+                id: 2,
+                category: '日志',
+            }, {
+                id: 3,
+                category: '技术',
+            }]
         }
         res.send(resData)
     },

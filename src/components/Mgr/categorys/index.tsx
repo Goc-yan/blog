@@ -5,7 +5,7 @@ import { Modal, Button, Icon, Table } from 'antd'
 
 import * as ajax from '@utils/ajax'
 
-import { ITag, IResData } from '@models'
+import { ICategory, IResData } from '@models'
 import { IState, IResArticles } from './models'
 
 import './style.css'
@@ -21,19 +21,23 @@ class Header extends React.Component<object, IState> {
       loading: false,
       visible: false,
       submitting: false,
+      editorData: {
+        id: null,
+        category: ''
+      },
       columns: [{
         title: 'ID',
         dataIndex: 'id',
         width: 10,
       }, {
         title: '标签名称',
-        dataIndex: 'tagName',
+        dataIndex: 'category',
         width: 800,
       }, {
         title: '操作',
         key: 'operation',
         width: 100,
-        render: (text: string, record: ITag) => (
+        render: (text: string, record: ICategory) => (
           <span>
             <a href="javascript:;" onClick={ this.showModal.bind(this, record) }>编辑</a>
           </span>
@@ -52,18 +56,18 @@ class Header extends React.Component<object, IState> {
   getData() {
 
     let _this = this
-    ajax.$get('/api/tags', function (resData: IResArticles): void {
+    ajax.$get('/api/categorys', function (resData: IResArticles): void {
       _this.setState({
         data: [...resData.data]
       })
     })
   }
 
-  addTag(data: ITag) {
+  addCategory(data: ICategory) {
 
     let _this = this
 
-    ajax.$post('/api/tags', data, function (resData: IResData): void {
+    ajax.$post('/api/categorys', data, function (resData: IResData): void {
       console.log(resData)
 
       _this.setState({
@@ -81,15 +85,15 @@ class Header extends React.Component<object, IState> {
       data: this.state.selectedRowKeys
     }
 
-    ajax.$delete('/api/tags', options, function (resData: IResData): void {
+    ajax.$delete('/api/categorys', options, function (resData: IResData): void {
       console.log(resData)
     })
   }
 
-  updateTag(data: ITag) {
+  updateCategory(data: ICategory) {
 
     let _this = this
-    ajax.$put('/api/tags', data, function (resData: IResData): void {
+    ajax.$put('/api/categorys', data, function (resData: IResData): void {
       console.log(resData)
 
       _this.setState({
@@ -100,9 +104,9 @@ class Header extends React.Component<object, IState> {
     })
   }
 
-  getFormData(editorTag: ITag) {
+  getFormData(editorData: ICategory) {
     this.setState({
-      editorTag
+      editorData
     })
   }
 
@@ -113,12 +117,12 @@ class Header extends React.Component<object, IState> {
 
   showModal(data: any) {
 
-    let editorTag: ITag = { id: null, tagName: '' }
-    if (data.id) editorTag = { ...data }
+    let editorData: ICategory = { id: null, category: '' }
+    if (data.id) editorData = { ...data }
 
     this.setState({
       visible: true,
-      editorTag
+      editorData
     })
   }
 
@@ -126,12 +130,12 @@ class Header extends React.Component<object, IState> {
 
     this.setState({ loading: true, submitting: true })
 
-    let data = this.state.editorTag
+    let data = this.state.editorData
 
     if (data.id) {
-      this.addTag(data)
+      this.addCategory(data)
     } else {
-      this.updateTag(data)
+      this.updateCategory(data)
     }
   }
 
@@ -150,7 +154,7 @@ class Header extends React.Component<object, IState> {
       visible,
       loading,
       submitting,
-      editorTag
+      editorData
     } = this.state
 
     const rowSelection = { selectedRowKeys, onChange: this.onSelectChange }
@@ -188,7 +192,7 @@ class Header extends React.Component<object, IState> {
             </Button>,
           ]}
         >
-          <Editor ref='editorForm' data={editorTag} setFormData={this.getFormData} />
+          <Editor ref='editorForm' data={editorData} setFormData={this.getFormData} />
         </Modal>
       </div>
     )

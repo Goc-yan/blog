@@ -21,9 +21,16 @@ export interface IArticle {
     id?: number | null
     title: string
     content: string
+    tags?: number[]
 }
 
 export interface ITag {
     id: number | null
     tagName: string
 }
+
+export interface ICategory {
+    id: number | null
+    category: string
+}
+

@@ -7,7 +7,7 @@ import { IProp } from './models'
 import './style.css'
 
 
-class TagsForm extends React.Component<IProp> {
+class CategorysForm extends React.Component<IProp> {
 
     constructor(prop: IProp) {
 
@@ -18,7 +18,7 @@ class TagsForm extends React.Component<IProp> {
     setFormData(e: any) {
         this.props.setFormData({
             id: this.props.data.id,
-            tagName: e.target.value
+            category: e.target.value
         })
     }
 
@@ -33,15 +33,15 @@ class TagsForm extends React.Component<IProp> {
             wrapperCol: { span: 18 },
         }
 
-        let { tagName } = this.props.data
+        let { category } = this.props.data
 
         return (
             <Form {...formItemLayout}>
                 <Form.Item label="标签" >
-                    {getFieldDecorator('tagName', {
-                        initialValue: tagName,
+                    {getFieldDecorator('category', {
+                        initialValue: category,
                         rules: [{
-                            required: true, message: 'Please input tag name',
+                            required: true, message: 'Please input category name',
                         }],
                     })(<Input onChange={this.setFormData} />)}
                 </Form.Item>
@@ -50,4 +50,4 @@ class TagsForm extends React.Component<IProp> {
     }
 }
 
-export default Form.create({ name: 'tags' })(TagsForm)
+export default Form.create({ name: 'categorys' })(CategorysForm)

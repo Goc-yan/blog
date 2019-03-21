@@ -1,38 +1,20 @@
 import * as React from 'react'
 
-
 import { Form, Input, Select, Button, Tag } from 'antd'
+const { Option } = Select
+const CheckableTag = Tag.CheckableTag
 
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
 
+import { ITag } from '@models';
+import { IProp, IEditorState } from './models'
+
 import './style.css'
 
-import { IArticle } from '@models'
+class RegistrationForm extends React.Component<IProp, IEditorState> {
 
-const { Option } = Select
-const CheckableTag = Tag.CheckableTag
-
-const tagsFromServer = ['Movies', 'Books', 'Music', 'Sports']
-
-interface State {
-  confirmDirty: boolean
-  autoCompleteResult: string[]
-  selectedTags: string[]
-  modules: any
-  formats: string[]
-}
-
-interface Prop {
-  data: IArticle
-  form: any
-  update: any
-  add: any
-}
-
-class RegistrationForm extends React.Component<Prop, State> {
-
-  constructor(prop: Prop) {
+  constructor(prop: IProp) {
 
     super(prop)
 
@@ -74,12 +56,12 @@ class RegistrationForm extends React.Component<Prop, State> {
     })
   }
 
-  handleChange(tag: string, checked: boolean) {
+  handleChange(tag: ITag, checked: boolean) {
 
     const { selectedTags } = this.state
     const nextSelectedTags = checked
-      ? [...selectedTags, tag]
-      : selectedTags.filter(t => t !== tag)
+      ? [...selectedTags, tag.id]
+      : selectedTags.filter(t => t !== tag.id)
     this.setState({ selectedTags: nextSelectedTags })
   }
 
@@ -96,7 +78,10 @@ class RegistrationForm extends React.Component<Prop, State> {
       wrapperCol: { span: 3, offset: 12 },
     }
 
-    let { title, content } = this.props.data
+    let { tags, data } = this.props
+    let { title, content } = data
+
+    let { selectedTags, modules, formats } = this.state
 
     return (
       <Form {...formItemLayout} onSubmit={this.handleSubmit}>
@@ -118,18 +103,18 @@ class RegistrationForm extends React.Component<Prop, State> {
           </Select>)}
         </Form.Item>
         <Form.Item label="标签" >
-          {getFieldDecorator('tag', {
-            initialValue: this.state.selectedTags
+          {getFieldDecorator('tags', {
+            initialValue: selectedTags
           })(<>
-              {tagsFromServer.map(tag => (
-                <CheckableTag
-                  key={tag}
-                  checked={this.state.selectedTags.indexOf(tag) > -1}
-                  onChange={checked => this.handleChange(tag, checked)}>
-                  {tag}
-                </CheckableTag>
-              ))}
-            </>)
+            {tags.map(tag => (
+              <CheckableTag
+                key={tag.id}
+                checked={selectedTags.indexOf(tag.id) > -1}
+                onChange={checked => this.handleChange(tag, checked)}>
+                {tag.tagName}
+              </CheckableTag>
+            ))}
+          </>)
           }
         </Form.Item>
         <Form.Item label="正文">
@@ -137,8 +122,8 @@ class RegistrationForm extends React.Component<Prop, State> {
             initialValue: content,
           })(<ReactQuill
             theme="snow"
-            modules={this.state.modules}
-            formats={this.state.formats} />)
+            modules={modules}
+            formats={formats} />)
           }
         </Form.Item>
         <Form.Item {...tailFormItemLayout}>

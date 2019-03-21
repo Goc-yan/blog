@@ -15,3 +15,13 @@ td.column-id {
     overflow: hidden;
     margin-bottom: 20px;
 }
+
+.quill {
+    height: 200px;
+    line-height: 20px;
+}
+
+.ql-snow {
+    float: left;
+    width: 100%;
+}
