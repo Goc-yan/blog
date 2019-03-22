@@ -66,7 +66,6 @@ export default class Component extends React.Component<any> {
                                             path={`${this.props.match.path}/`}
                                             render={() => <Redirect to={`${this.props.match.path}/article`} />}
                                         />
-                                        
                                         <Route exact path={`${this.props.match.path}/article`} component={Mgr.Articles} />
                                         <Route exact path={`${this.props.match.path}/tag`} component={Mgr.Tag} />
                                         <Route exact path={`${this.props.match.path}/category`} component={Mgr.Category} />

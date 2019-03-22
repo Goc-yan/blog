@@ -182,7 +182,7 @@ class Header extends React.Component<object, IState> {
           dataSource={this.state.data} />
         <Modal
           visible={visible}
-          title="新增标签"
+          title={ editorData.id ? '修改分类' : '新增分类'}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
           footer={[

@@ -21,6 +21,10 @@ class Header extends React.Component<object, IState> {
       loading: false,
       visible: false,
       submitting: false,
+      editorData: {
+        id: null,
+        tagName: ''
+      },
       columns: [{
         title: 'ID',
         dataIndex: 'id',
@@ -100,9 +104,9 @@ class Header extends React.Component<object, IState> {
     })
   }
 
-  getFormData(editorTag: ITag) {
+  getFormData(editorData: ITag) {
     this.setState({
-      editorTag
+      editorData
     })
   }
 
@@ -113,12 +117,12 @@ class Header extends React.Component<object, IState> {
 
   showModal(data: any) {
 
-    let editorTag: ITag = { id: null, tagName: '' }
-    if (data.id) editorTag = { ...data }
+    let editorData: ITag = { id: null, tagName: '' }
+    if (data.id) editorData = { ...data }
 
     this.setState({
       visible: true,
-      editorTag
+      editorData
     })
   }
 
@@ -126,7 +130,7 @@ class Header extends React.Component<object, IState> {
 
     this.setState({ loading: true, submitting: true })
 
-    let data = this.state.editorTag
+    let data = this.state.editorData
 
     if (data.id) {
       this.addTag(data)
@@ -150,7 +154,7 @@ class Header extends React.Component<object, IState> {
       visible,
       loading,
       submitting,
-      editorTag
+      editorData
     } = this.state
 
     const rowSelection = { selectedRowKeys, onChange: this.onSelectChange }
@@ -178,7 +182,7 @@ class Header extends React.Component<object, IState> {
           dataSource={this.state.data} />
         <Modal
           visible={visible}
-          title="新增标签"
+          title={ editorData.id ? '修改标签' : '新增标签'}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
           footer={[
@@ -188,7 +192,7 @@ class Header extends React.Component<object, IState> {
             </Button>,
           ]}
         >
-          <Editor ref='editorForm' data={editorTag} setFormData={this.getFormData} />
+          <Editor ref='editorForm' data={editorData} setFormData={this.getFormData} />
         </Modal>
       </div>
     )

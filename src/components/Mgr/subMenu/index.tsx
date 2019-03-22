@@ -13,7 +13,7 @@ let getNavIndex = function (list: INav[], name: string): string {
     let fn = list[i1]
     for (let i2 in fn.options) {
       let sn = fn.options[i2]
-      if (name === sn.router) return i2
+      if (name === sn.router) return i1 + '_' + i2
     }
   }
 }
@@ -34,7 +34,7 @@ export default function (prop: IProp) {
           {prop.data.map((subnav, index) => (
             <SubMenu key={index} title={<span><Icon type="user" />{subnav.title}</span>}>
               {subnav.options.map((option, index2) => (
-                <Menu.Item key={index2} >
+                <Menu.Item key={index + '_' + index2} >
                   <Link to={option.router}>{option.name}</Link>
                 </Menu.Item>
               ))}

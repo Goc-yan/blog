@@ -7,7 +7,7 @@ export interface IState {
     loading: boolean
     visible: boolean
     submitting: boolean
-    editorTag?: ITag
+    editorData?: ITag
     formRef?: any
 }
 
