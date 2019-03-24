@@ -86,8 +86,10 @@ class Header extends React.Component<object, IState> {
 
     let _this = this
     let options = {
-      data: this.state.selectedRowKeys
+      ids: this.state.selectedRowKeys
     }
+
+    console.log(options)
 
     ajax.$delete('/api/articles', options, function (resData: IResData): void {
       console.log(resData)

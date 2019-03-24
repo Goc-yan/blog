@@ -1,0 +1,1 @@
+const resData = (errCode, data) => { errCode, data }

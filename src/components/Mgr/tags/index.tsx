@@ -82,7 +82,7 @@ class Header extends React.Component<object, IState> {
 
     let _this = this
     let options = {
-      data: this.state.selectedRowKeys
+      ids: this.state.selectedRowKeys
     }
 
     ajax.$delete('/api/tags', options, function (resData: IResData): void {
@@ -132,11 +132,7 @@ class Header extends React.Component<object, IState> {
 
     let data = this.state.editorData
 
-    if (data.id) {
-      this.addTag(data)
-    } else {
-      this.updateTag(data)
-    }
+    data.id ? this.updateTag(data) : this.addTag(data)
   }
 
   handleCancel() {
