@@ -16,6 +16,7 @@ let getNavIndex = function (list: INav[], name: string): string {
       if (name === sn.router) return i1 + '_' + i2
     }
   }
+  return '0_0'
 }
 
 export default function (prop: IProp) {
