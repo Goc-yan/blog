@@ -65,7 +65,11 @@ class RegistrationForm extends React.Component<IProp, IEditorState> {
     this.setState({ selectedTags: nextSelectedTags })
   }
 
-  componentWillMount() { }
+  componentWillMount() {
+    this.setState({
+      selectedTags: this.props.data.tags || [],
+    })
+  }
 
   render() {
     const { getFieldDecorator } = this.props.form
@@ -78,8 +82,8 @@ class RegistrationForm extends React.Component<IProp, IEditorState> {
       wrapperCol: { span: 3, offset: 12 },
     }
 
-    let { tags, data } = this.props
-    let { title, content } = data
+    let { tags, categorys, data } = this.props
+    let { title, content, category } = data
 
     let { selectedTags, modules, formats } = this.state
 
@@ -95,11 +99,13 @@ class RegistrationForm extends React.Component<IProp, IEditorState> {
         </Form.Item>
         <Form.Item label="分类" >
           {getFieldDecorator('category', {
-            initialValue: '1',
+            initialValue: category || this.props.categorys[0].id.toString(),
           })(<Select>
-            <Option value="1">随笔</Option>
-            <Option value="2">技术</Option>
-            <Option value="3">没了</Option>
+            {
+              categorys.map(data => (
+                <Option value={data.id.toString()}>{data.category}</Option>
+              ))
+            }
           </Select>)}
         </Form.Item>
         <Form.Item label="标签" >

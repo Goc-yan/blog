@@ -32,10 +32,14 @@ const proxy = {
             data: [{
                 id: 2,
                 title: 'webpack简易上手指南',
+                tags: '1,2',
+                category: '1',
                 content: '内容'
             }, {
                 id: 3,
                 title: '谈谈跨域',
+                tags: '1,2',
+                category: '1',
                 content: '内容'
             }]
         }

@@ -7,7 +7,7 @@ import { Button, Icon, Table } from 'antd'
 import * as ajax from '@utils/ajax'
 
 import { IResData, IArticle } from '@models'
-import { IState, IResArticles, IResTags } from './models'
+import { IState, IResArticles, IResTags, IResCategory } from './models'
 
 import './style.css'
 
@@ -20,6 +20,7 @@ class Header extends React.Component<object, IState> {
       data: [],
       selectedRowKeys: [],
       tags: [],
+      categorys: [],
       columns: [{
         title: 'ID',
         dataIndex: 'id',
@@ -61,6 +62,16 @@ class Header extends React.Component<object, IState> {
     })
   }
 
+  
+  getCategorys() {
+    let _this = this
+    ajax.$get('/api/categorys', function (resData: IResCategory): void {
+      _this.setState({
+        categorys: [...resData.data]
+      })
+    })
+  }
+
   // 获取文章列表
   getData() {
 
@@ -88,8 +99,6 @@ class Header extends React.Component<object, IState> {
     let options = {
       ids: this.state.selectedRowKeys
     }
-
-    console.log(options)
 
     ajax.$delete('/api/articles', options, function (resData: IResData): void {
       console.log(resData)
@@ -126,13 +135,13 @@ class Header extends React.Component<object, IState> {
 
   // 复选框
   onSelectChange(selectedRowKeys: number[]): void {
-    console.log('selectedRowKeys changed: ', selectedRowKeys);
     this.setState({ selectedRowKeys });
   }
 
   componentDidMount() {
     this.getData()
     this.getTags()
+    this.getCategorys()
   }
 
   render() {
@@ -172,7 +181,7 @@ class Header extends React.Component<object, IState> {
         </div>
         {
           this.state.isEditor
-            ? <Editor tags={this.state.tags} data={this.state.article} update={this.updateArticle} add={this.addArticle} />
+            ? <Editor tags={this.state.tags} categorys={this.state.categorys} data={this.state.article} update={this.updateArticle} add={this.addArticle} />
             : <Table rowKey={record => record.id.toString()}
               rowSelection={rowSelection}
               columns={this.state.columns}

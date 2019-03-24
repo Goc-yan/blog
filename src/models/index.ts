@@ -22,6 +22,7 @@ export interface IArticle {
     title: string
     content: string
     tags?: number[]
+    category?: string
 }
 
 export interface ITag {
