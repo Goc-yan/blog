@@ -62,7 +62,7 @@ class Header extends React.Component<object, IState> {
     })
   }
 
-  
+
   getCategorys() {
     let _this = this
     ajax.$get('/api/categorys', function (resData: IResCategory): void {

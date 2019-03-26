@@ -1,0 +1,13 @@
+.content {
+    width: 80%;
+    margin: 0 auto;
+    padding: 0 40px;
+    border: solid thin #ccc;
+    border-radius: 5px;
+    font-size: 18px;
+    line-height: 48px;
+}
+
+.article-header {
+    text-align: center;
+}

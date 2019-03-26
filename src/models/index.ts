@@ -5,7 +5,7 @@ export interface Obj {
 export interface IResData {
     errCode: number
     msg?: string
-    data?: any[]
+    data?: any
     errMsg?: string
 }
 
@@ -21,7 +21,7 @@ export interface IArticle {
     id?: number | null
     title: string
     content: string
-    tags?: number[]
+    tags?: string
     category?: string
 }
 

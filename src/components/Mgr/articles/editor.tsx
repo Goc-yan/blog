@@ -66,8 +66,9 @@ class RegistrationForm extends React.Component<IProp, IEditorState> {
   }
 
   componentWillMount() {
+    let tags = this.props.data.tags.split(',').map(num => Number(num))
     this.setState({
-      selectedTags: this.props.data.tags || [],
+      selectedTags: tags || [],
     })
   }
 
