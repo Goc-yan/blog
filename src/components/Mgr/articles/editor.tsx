@@ -2,10 +2,11 @@ import * as React from 'react'
 
 import { Form, Input, Select, Button, Tag } from 'antd'
 const { Option } = Select
+const { TextArea } = Input
 const CheckableTag = Tag.CheckableTag
 
-import ReactQuill from 'react-quill'
-import 'react-quill/dist/quill.snow.css'
+// import ReactQuill from 'react-quill'
+// import 'react-quill/dist/quill.snow.css'
 
 import { ITag } from '@models';
 import { IProp, IEditorState } from './models'
@@ -22,21 +23,21 @@ class RegistrationForm extends React.Component<IProp, IEditorState> {
       confirmDirty: false,
       autoCompleteResult: [],
       selectedTags: [],
-      modules: {
-        toolbar: [
-          [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-          ['bold', 'italic', 'underline', 'strike', 'blockquote', 'code'],
-          [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
-          ['link', 'image'],
-          ['clean']
-        ],
-      },
-      formats: [
-        'header',
-        'bold', 'italic', 'underline', 'strike', 'blockquote', 'code',
-        'list', 'bullet', 'indent',
-        'link', 'image'
-      ],
+      // modules: {
+      //   toolbar: [
+      //     [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+      //     ['bold', 'italic', 'underline', 'strike', 'blockquote', 'code'],
+      //     [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
+      //     ['link', 'image'],
+      //     ['clean']
+      //   ],
+      // },
+      // formats: [
+      //   'header',
+      //   'bold', 'italic', 'underline', 'strike', 'blockquote', 'code',
+      //   'list', 'bullet', 'indent',
+      //   'link', 'image'
+      // ],
     }
 
     this.handleChange = this.handleChange.bind(this)
@@ -66,9 +67,8 @@ class RegistrationForm extends React.Component<IProp, IEditorState> {
   }
 
   componentWillMount() {
-    let tags = this.props.data.tags.split(',').map(num => Number(num))
     this.setState({
-      selectedTags: tags || [],
+      selectedTags: this.props.data.tags || [],
     })
   }
 
@@ -86,7 +86,7 @@ class RegistrationForm extends React.Component<IProp, IEditorState> {
     let { tags, categorys, data } = this.props
     let { title, content, category } = data
 
-    let { selectedTags, modules, formats } = this.state
+    let { selectedTags } = this.state
 
     return (
       <Form {...formItemLayout} onSubmit={this.handleSubmit}>
@@ -124,7 +124,7 @@ class RegistrationForm extends React.Component<IProp, IEditorState> {
           </>)
           }
         </Form.Item>
-        <Form.Item label="正文">
+        {/* <Form.Item label="正文">
           {getFieldDecorator('content', {
             initialValue: content,
           })(<ReactQuill
@@ -132,7 +132,17 @@ class RegistrationForm extends React.Component<IProp, IEditorState> {
             modules={modules}
             formats={formats} />)
           }
+        </Form.Item> */}
+        <Form.Item label="正文">
+          {getFieldDecorator('content', {
+            initialValue: content,
+            rules: [{
+              required: true, message: 'Please input article content',
+            }],
+          })(<TextArea rows={20} />)
+          }
         </Form.Item>
+
         <Form.Item {...tailFormItemLayout}>
           <Button type="primary" htmlType="submit">保存</Button>
         </Form.Item>

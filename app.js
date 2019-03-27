@@ -22,20 +22,20 @@ app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'dist')))
 
 
-app.all('*', function (req, res, next) {
+// CROS
+var allowCrossDomain = function (req, res, next) {
   // res.header("Access-Control-Allow-Credentials", true)
   res.header("Access-Control-Allow-Origin", "*")
   res.header("Access-Control-Allow-Headers", "X-Requested-With,Content-Type")
   res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS")
   res.header("X-Powered-By", ' 3.2.1')
-  res.header("Content-Type", "application/jsoncharset=utf-8")
+  // res.header("Content-Type", "application/jsoncharset=utf-8")
 
   if (req.method === 'OPTIONS') res.sendStatus(200)
   else next()
-})
+}
 
-
-
+app.use(allowCrossDomain)
 app.use('/api', api)
 app.use('/', indexRouter)
 app.use('/mgr', mgrRouter)

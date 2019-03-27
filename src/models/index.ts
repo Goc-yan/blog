@@ -21,7 +21,7 @@ export interface IArticle {
     id?: number | null
     title: string
     content: string
-    tags?: string
+    tags?: number[]
     category?: string
 }
 

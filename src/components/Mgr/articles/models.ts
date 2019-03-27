@@ -26,8 +26,6 @@ export interface IEditorState {
     confirmDirty: boolean
     autoCompleteResult: string[]
     selectedTags: number[]
-    modules: any
-    formats: string[]
 }
 
 export interface IProp {
