@@ -1,5 +1,7 @@
 import * as React from 'react'
 
+import { Link } from 'react-router-dom'
+
 import './style.css'
 
 // AJAX
@@ -39,7 +41,7 @@ export default class Home extends React.Component<object, IState> {
     return (
       <div className="body">
         <ul className="list-wrapper">
-          {this.state.list.map((data, index) => <li key={index}><a href="#">{data.title}</a></li>)}
+          {this.state.list.map((data, index) => <li key={index}><Link to={ 'article?articleID=' + data.id}>{data.title}</Link></li>)}
         </ul>
       </div>
     )

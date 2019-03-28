@@ -139,7 +139,7 @@ class RegistrationForm extends React.Component<IProp, IEditorState> {
             rules: [{
               required: true, message: 'Please input article content',
             }],
-          })(<TextArea rows={20} />)
+          })(<TextArea rows={16} />)
           }
         </Form.Item>
 

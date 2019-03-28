@@ -1,5 +1,8 @@
 import * as React from 'react'
 
+import * as marked from 'marked';
+import * as hljs from 'highlight.js';
+
 import './style.css'
 
 // AJAX
@@ -41,6 +44,21 @@ export default class Home extends React.Component<object, IState> {
   }
 
   componentDidMount() {
+
+    marked.setOptions({
+      renderer: new marked.Renderer(),
+      gfm: true,
+      tables: true,
+      breaks: true,
+      pedantic: false,
+      sanitize: true,
+      smartLists: true,
+      smartypants: false,
+      highlight: function (code: any) {
+        return hljs.highlightAuto(code).value;
+      },
+    });
+
     this.getArticle()
   }
 
@@ -50,7 +68,11 @@ export default class Home extends React.Component<object, IState> {
       <div className="body">
         <div className="content">
           <h3 className="article-header">{title}</h3>
-          <div>{content}</div>
+          <div
+            id="content"
+            className="article-detail"
+            dangerouslySetInnerHTML={{ __html: content ? marked(content) : null }}
+          />
         </div>
       </div>
     )

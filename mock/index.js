@@ -1,16 +1,37 @@
+let content = `
+# 谈谈跨域
+
+> 这是内容
+
+test
+
+\`\`\` js
+    var React = require('react');
+    var Markdown = require('react-markdown');
+
+    React.render(
+    <Markdown source="# Your markdown here" />,
+    document.getElementById('content')
+    );
+\`\`\`
+
+`
+
 const articles = [{
     id: 2,
     title: 'webpack简易上手指南',
     tags: '1,2',
     category: '1',
-    content: '内容'
+    content: content
 }, {
     id: 3,
     title: '谈谈跨域',
     tags: '1,2',
     category: '1',
-    content: '内容'
+    content: '# 谈谈跨域\n\n> 这是内容'
 }]
+
+
 
 
 const proxy = {
@@ -49,32 +70,20 @@ const proxy = {
         res.send(resData)
     },
 
-    'GET /api/articles/1': function (req, res) {
-
-        var resData = {
-            errCode: 0,
-            data: {
-                id: 2,
-                title: 'webpack简易上手指南',
-                tags: '1,2',
-                category: '1',
-                content: 'webpack简易上手指南 de 内容'
-            }
-        }
-        res.send(resData)
-    },
-
     'GET /api/articles/2': function (req, res) {
 
         var resData = {
             errCode: 0,
-            data: {
-                id: 2,
-                title: '谈谈跨域',
-                tags: '1,2',
-                category: '1',
-                content: '谈谈跨域 de 内容'
-            }
+            data: articles[0]
+        }
+        res.send(resData)
+    },
+
+    'GET /api/articles/3': function (req, res) {
+
+        var resData = {
+            errCode: 0,
+            data: articles[1]
         }
         res.send(resData)
     },
