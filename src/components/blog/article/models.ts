@@ -1,7 +1,7 @@
 import { IArticle, IResData } from '@models'
 
 export interface IResArticles extends IResData {
-    data: IArticle
+    data: IArticle[]
 }
 
 export interface IState {

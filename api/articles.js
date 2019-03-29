@@ -7,7 +7,9 @@ var { connection, query } = require('../db')
 const resData = (errCode, data) => ({ errCode, data })
 
 // 获取所有文章
-router.get('/', async function (req, res, next) {
+router.get('/', function (req, res, next) {
+
+    console.log('获取所有文章')
 
     // SQL语句
     var sql = 'SELECT * FROM articles';
@@ -96,28 +98,26 @@ router.delete('/', function (req, res, next) {
 // 查看文章
 router.get('/:id', function (req, res, next) {
 
+    let id = req.params.id
+
     // SQL语句
-    var sql = 'SELECT * FROM articles WHERE id = ' + id + '  DESC LIMIT 1';
+    var sql = `SELECT * FROM articles WHERE id=${id} LIMIT 1`
 
-    connection.query(sql, function (err, result) {
+    connection.query(sql, async function (err, result) {
 
-        // let tagsWithId = result[0].tags
-        // let categoryID = result[0].category
+        let tagsWithId = result[0].tags
+        let categoryID = result[0].category
 
-        // let queryTags = `SELECT * FROM tags id in (${tagsWithId}) LIMIT 1`
-        // var queryCategory = `SELECT * FROM categorys WHRER id = ${categoryID} LIMIT 1`
+        let queryTags = `SELECT * FROM tags WHERE id in (${tagsWithId})`
+        let queryCategory = `SELECT * FROM categorys WHERE id = ${categoryID} LIMIT 1`
 
-        // var tags = await query(queryTags)
-        // var category = await query(queryCategory)
+        let tags = await query(queryTags)
+        let [ { category } ] = await query(queryCategory)
 
-        result.forEach(data => data.tags = data.tags.split(',').map(str => Number(str)))
+        result[0].category = category
+        result[0].tags = tags.map(tag => tag.tagName)
 
         err ? console.log('[SELECT ERROR] - ', err.message) : res.send(resData(0, result));
-    });
-
-    //把搜索值输出
-    res.send({
-        test: 'detail'
     });
 });
 

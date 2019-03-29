@@ -9,7 +9,6 @@ import './style.css'
 import { $get } from '@utils/ajax'
 import { getUrlParams } from '@utils/lib'
 
-
 // 接口
 import { IResArticles, IState } from './models'
 
@@ -37,7 +36,7 @@ export default class Home extends React.Component<object, IState> {
 
       resData.errCode === 0
         ? _this.setState({
-          data: resData.data
+          data: resData.data[0]
         })
         : console.log(resData.errMsg)
     })
