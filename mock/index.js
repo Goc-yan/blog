@@ -17,23 +17,6 @@ test
 
 `
 
-const articles = [{
-    id: 2,
-    title: 'webpack简易上手指南',
-    tags: '1,2',
-    category: '1',
-    content: content
-}, {
-    id: 3,
-    title: '谈谈跨域',
-    tags: '1,2',
-    category: '1',
-    content: '# 谈谈跨域\n\n> 这是内容'
-}]
-
-
-
-
 const proxy = {
 
     // 文章
@@ -65,7 +48,19 @@ const proxy = {
 
         var resData = {
             errCode: 0,
-            data: articles
+            data: [{
+                id: 2,
+                title: 'webpack简易上手指南',
+                tags: '1,2',
+                category: '1',
+                content: content
+            }, {
+                id: 3,
+                title: '谈谈跨域',
+                tags: '1,2',
+                category: '1',
+                content: '# 谈谈跨域\n\n> 这是内容'
+            }]
         }
         res.send(resData)
     },
@@ -74,7 +69,13 @@ const proxy = {
 
         var resData = {
             errCode: 0,
-            data: articles[0]
+            data: {
+                id: 2,
+                title: 'webpack简易上手指南',
+                tags: ['javascript', 'webpack'],
+                category: '日志',
+                content: content
+            }
         }
         res.send(resData)
     },
@@ -83,7 +84,13 @@ const proxy = {
 
         var resData = {
             errCode: 0,
-            data: articles[1]
+            data: {
+                id: 3,
+                title: '谈谈跨域',
+                tags: ['javascript', 'webpack'],
+                category: '随笔',
+                content: '# 谈谈跨域\n\n> 这是内容'
+            }
         }
         res.send(resData)
     },

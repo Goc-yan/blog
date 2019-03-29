@@ -94,10 +94,31 @@ router.delete('/', function (req, res, next) {
 });
 
 // 查看文章
-router.get('/detail', function (req, res, next) {
+router.get('/:id', function (req, res, next) {
+
+    // SQL语句
+    var sql = 'SELECT * FROM articles WHERE id = ' + id + '  DESC LIMIT 1';
+
+    connection.query(sql, function (err, result) {
+
+        // let tagsWithId = result[0].tags
+        // let categoryID = result[0].category
+
+        // let queryTags = `SELECT * FROM tags id in (${tagsWithId}) LIMIT 1`
+        // var queryCategory = `SELECT * FROM categorys WHRER id = ${categoryID} LIMIT 1`
+
+        // var tags = await query(queryTags)
+        // var category = await query(queryCategory)
+
+        result.forEach(data => data.tags = data.tags.split(',').map(str => Number(str)))
+
+        err ? console.log('[SELECT ERROR] - ', err.message) : res.send(resData(0, result));
+    });
 
     //把搜索值输出
-    res.send({ test: 'detail' });
+    res.send({
+        test: 'detail'
+    });
 });
 
 module.exports = router;

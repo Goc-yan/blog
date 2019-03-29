@@ -63,11 +63,14 @@ export default class Home extends React.Component<object, IState> {
   }
 
   render() {
-    let { title, content } = this.state.data
+    let { title, content, tags } = this.state.data
     return (
       <div className="body">
         <div className="content">
           <h3 className="article-header">{title}</h3>
+          <ul className="tags">
+            { tags.map(tag => <li>{tag}</li>)}
+          </ul>
           <div
             id="content"
             className="article-detail"
