@@ -37,6 +37,7 @@ module.exports = function (env, argv) {
         entry: {
             blog: entryUrl('blog'),
             mgr: entryUrl('mgr'),
+            FA: entryUrl('FA'),
         },
         output: {
             path: path.resolve(rootUrl, 'dist'),
@@ -85,6 +86,7 @@ module.exports = function (env, argv) {
             'react-dom': 'ReactDOM',
             'moment': 'moment',
             'antd': 'antd',
+            'highlight.js': 'highlight',
         },
         optimization: {
             minimize: isProd,
@@ -110,6 +112,14 @@ module.exports = function (env, argv) {
                 filename: './pages/mgr.html', // 输出html文件名称
                 inject: false,
                 chunks: ['mgr']
+            }),
+            new HtmlWebpackPlugin({
+                name: 'FA',
+                title: 'Financial management',
+                template: './src/pages/FA/index.html', // 模板路径
+                filename: './pages/FA.html', // 输出html文件名称
+                inject: false,
+                chunks: ['FA']
             }),
             new MiniCssExtractPlugin({
                 filename: 'styles/[name].[hash].css',
