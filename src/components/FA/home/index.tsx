@@ -13,12 +13,12 @@ import { $get } from '@utils/ajax'
 import { IResArticles, IState } from './models'
 
 const columns = [{
-  title: '类别',
-  dataIndex: 'category',
-}, {
-  title: '是否持有',
-  dataIndex: 'isHold',
-}, {
+//   title: '类别',
+//   dataIndex: 'category',
+// }, {
+//   title: '是否持有',
+//   dataIndex: 'isHold',
+// }, {
   title: '代码',
   dataIndex: 'code',
 }, {
@@ -40,6 +40,19 @@ const columns = [{
 
 const data:any = []
 
+const getData = (data: string) => {
+  let arr: string[]
+  arr = data.split('~')
+  return {
+    name: arr[1],
+    code: arr[2],
+    netWorth: '',
+    valuation: '',
+    income: '',
+    annualizedIncome: '',
+  }
+}
+
 
 export default class Home extends React.Component<object, IState> {
 
@@ -47,6 +60,11 @@ export default class Home extends React.Component<object, IState> {
     super(prop)
 
     this.state = {
+      // codes: [
+      //   'sh600519',
+      //   'sz161810',
+      //   // 'sh519300'
+      // ],
       list: []
     }
   }
@@ -54,13 +72,25 @@ export default class Home extends React.Component<object, IState> {
   getData() {
 
     let _this = this
-    $get('/api/articles', function (resData: IResArticles): void {
+    $get('/api/funds', function (resData: any): void {
 
-      resData.errCode === 0
-        ? _this.setState({
-          list: [...resData.data]
-        })
-        : console.log(resData.errMsg)
+      console.log(resData)
+      
+      // var res: IData
+      // var list: IData[]
+
+      // list = resData.split(';\n').filter((str:string) => str.length > 0).map(getData)
+      // console.log(list)
+
+      // _this.setState({
+      //   list: [...list]
+      // })
+
+      // resData.errCode === 0
+      //   ? _this.setState({
+      //     list: [...resData.data]
+      //   })
+      //   : console.log(resData.errMsg)
     })
   }
 
@@ -69,9 +99,10 @@ export default class Home extends React.Component<object, IState> {
   }
 
   render() {
+    let { list } = this.state
     return (
       <div className="body">
-        <Table columns={columns} dataSource={data} />
+        <Table columns={columns} dataSource={list} />
       </div>
     )
   }

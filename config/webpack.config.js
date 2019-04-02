@@ -86,7 +86,7 @@ module.exports = function (env, argv) {
             'react-dom': 'ReactDOM',
             'moment': 'moment',
             'antd': 'antd',
-            'highlight.js': 'highlight',
+            'highlight.js': 'hljs',
         },
         optimization: {
             minimize: isProd,
