@@ -34,11 +34,29 @@ let getData = async function (code) {
     })
 }
 
+let changeKey = data => {
+
+    let keys = {
+        fundcode: 'code',
+        dwjz: 'netWorth',
+        gsz: 'valuation',
+    }
+    for (let key in keys) {
+
+        data[keys[key]] = data[key]
+        delete data[key]
+    }
+    return data
+    
+}
+
 // 获取所有文章
 router.get('/', async function (req, res, next) {
 
     let results = await Promise.all(codes.map(async (data) => await getData(data)));
-    res.send({ results })
+    let _results = results.map(changeKey)
+    console.log(_results)
+    res.send(resData(0, results))
 });
 
 

@@ -2,7 +2,7 @@ import * as React from 'react'
 
 import { Link } from 'react-router-dom'
 
-import { Table, Divider, Tag } from 'antd'
+import { Table } from 'antd'
 
 import './style.css'
 
@@ -10,7 +10,7 @@ import './style.css'
 import { $get } from '@utils/ajax'
 
 // 接口
-import { IResArticles, IState } from './models'
+import { IState } from './models'
 
 const columns = [{
 //   title: '类别',
@@ -30,6 +30,14 @@ const columns = [{
 }, {
   title: '估值',
   dataIndex: 'valuation',
+  render: (text: any, record: any) => {
+    return (
+      <span>
+        <span>{record.valuation}</span>
+        <span className={record.gszzl > 0 ? 'profit' : 'loss'}>{record.gszzl}</span>
+      </span>
+    )
+  },
 }, {
   title: '收益',
   key: 'income',
@@ -38,21 +46,6 @@ const columns = [{
   key: 'annualizedIncome',
 }]
 
-const data:any = []
-
-const getData = (data: string) => {
-  let arr: string[]
-  arr = data.split('~')
-  return {
-    name: arr[1],
-    code: arr[2],
-    netWorth: '',
-    valuation: '',
-    income: '',
-    annualizedIncome: '',
-  }
-}
-
 
 export default class Home extends React.Component<object, IState> {
 
@@ -60,11 +53,6 @@ export default class Home extends React.Component<object, IState> {
     super(prop)
 
     this.state = {
-      // codes: [
-      //   'sh600519',
-      //   'sz161810',
-      //   // 'sh519300'
-      // ],
       list: []
     }
   }
@@ -73,24 +61,11 @@ export default class Home extends React.Component<object, IState> {
 
     let _this = this
     $get('/api/funds', function (resData: any): void {
-
-      console.log(resData)
-      
-      // var res: IData
-      // var list: IData[]
-
-      // list = resData.split(';\n').filter((str:string) => str.length > 0).map(getData)
-      // console.log(list)
-
-      // _this.setState({
-      //   list: [...list]
-      // })
-
-      // resData.errCode === 0
-      //   ? _this.setState({
-      //     list: [...resData.data]
-      //   })
-      //   : console.log(resData.errMsg)
+      resData.errCode === 0
+        ? _this.setState({
+          list: [...resData.data]
+        })
+        : console.log(resData.errMsg)
     })
   }
 

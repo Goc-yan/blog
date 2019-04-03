@@ -11,7 +11,7 @@ import { IState, IResArticles, IResTags, IResCategory } from './models'
 
 import './style.css'
 
-class Header extends React.Component<object, IState> {
+export default class Component extends React.Component<object, IState> {
 
   constructor(prop: object) {
     super(prop)
@@ -191,5 +191,3 @@ class Header extends React.Component<object, IState> {
     )
   }
 }
-
-export default Header

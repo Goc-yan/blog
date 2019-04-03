@@ -1,3 +1,19 @@
 .body {
     padding-top: 70px
 }
+
+.profit,
+.loss {
+    margin-left: 5px;
+    padding: 0 5px;
+    font-size: 12px;
+    line-height: 14px;
+    border-radius: 12px;
+    color: #fff;
+}
+.profit {
+    background-color: #d2174a;
+}
+.loss {
+    background-color: #4ba946;
+}
