@@ -9,18 +9,77 @@ const { Content } = Layout
 import './style.css'
 
 
-let menu = ['Home', 'Menu2', 'Menu3']
+let nav = [{
+    title: 'Blog',
+    options: [{
+        title: 'subnav1',
+        options: [{
+            name: '文章管理',
+            router: '/blog/article'
+        }, {
+            name: '标签管理',
+            router: '/blog/tag'
+        }, {
+            name: '分类管理',
+            router: '/blog/category'
+        }]
+    }, {
+        title: 'subnav2',
+        options: [{
+            name: 'option1',
+            router: '/'
+        }, {
+            name: 'option2',
+            router: '/'
+        }]
+    }, {
+        title: 'subnav3',
+        options: [{
+            name: 'option3',
+            router: '/'
+        }, {
+            name: 'option4',
+            router: '/'
+        }]
+    }]
+}, {
+    title: 'FA',
+    options: [{
+        title: 'subnav1',
+        options: [{
+            name: '基金管理',
+            router: '/fa/fund'
+        }, {
+            name: '股票管理',
+            router: '/fa/tag'
+        }]
+    }]
+}, {
+    title: 'Menu3',
+    options: [{
+        title: 'subnav1',
+        options: [{
+            name: '基金管理',
+            router: '/fa/fund'
+        }, {
+            name: '股票管理',
+            router: '/fa/tag'
+        }]
+    }]
+}]
+
+let menu = nav.map(data => data.title)
 let subMenu = [{
     title: 'subnav1',
     options: [{
         name: '文章管理',
-        router: '/home/article'
+        router: '/blog/article'
     }, {
         name: '标签管理',
-        router: '/home/tag'
+        router: '/blog/tag'
     }, {
         name: '分类管理',
-        router: '/home/category'
+        router: '/blog/category'
     }]
 }, {
     title: 'subnav2',
@@ -63,12 +122,10 @@ export default class Component extends React.Component<any> {
                                     <Switch>
                                         <Route
                                             exact
-                                            path={`${this.props.match.path}/`}
-                                            render={() => <Redirect to={`${this.props.match.path}/article`} />}
-                                        />
-                                        <Route exact path={`${this.props.match.path}/article`} component={Mgr.Articles} />
-                                        <Route exact path={`${this.props.match.path}/tag`} component={Mgr.Tag} />
-                                        <Route exact path={`${this.props.match.path}/category`} component={Mgr.Category} />
+                                            path='/'
+                                            render={() => <Redirect to='/blog' />} />
+                                        <Route path={`/blog`} component={Mgr.Blog} />
+                                        <Route path={`/fa`} component={Mgr.FA} />
                                     </Switch>
                                 </HashRouter>
                             </Content>

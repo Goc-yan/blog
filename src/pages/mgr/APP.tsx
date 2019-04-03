@@ -13,11 +13,7 @@ export default class App extends React.Component {
         return (
             <Router>
                 <Switch>
-                    <Route
-                        exact
-                        path='/'
-                        render={() => <Redirect to='/home' />} />
-                    <Route path="/home" component={Mgr.Home}></Route>
+                    <Route path="/" component={Mgr.Home}></Route>
                     <Route path="/login" component={Mgr.Login}></Route>
                 </Switch>
             </Router>

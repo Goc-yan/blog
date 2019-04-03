@@ -1,4 +1,6 @@
 import Home from './home'
+import Blog from './blog'
+import FA from './FA'
 import Login from './login'
 import Header from './header'
 import SubMenu from './subMenu'
@@ -10,6 +12,8 @@ import Category from './categorys'
 
 export default {
     Home,
+    Blog,
+    FA,
     Login,
     Header,
     SubMenu,
