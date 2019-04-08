@@ -1,0 +1,20 @@
+.user {
+    float: right;
+    margin: 20px 0;
+}
+.user img {
+    float: left;
+    display: block;
+    width: 24px;
+    height: 24px;
+}
+
+.user .accont-name {    
+    float: left;
+    margin-left: 15px;
+    color: #fff;
+    font-size: 18px;
+    line-height: 24px;
+    user-select: none;
+    cursor: pointer;
+}

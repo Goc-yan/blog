@@ -74,11 +74,12 @@ module.exports = function (env, argv) {
             }]
         },
         resolve: {
-            extensions: [".ts", ".tsx", ".js", ".json"],
+            extensions: [".ts", ".tsx", ".js", ".json", '.png'],
             alias: {
                 '@components': path.resolve(rootUrl, 'src', 'components'),
                 '@models': path.resolve(rootUrl, 'src', 'models'),
                 '@utils': path.resolve(rootUrl, 'src', 'utils'),
+                '@assets': path.resolve(rootUrl, 'src', 'assets'),
             },
         },
         externals: {

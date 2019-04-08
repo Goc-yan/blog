@@ -13,8 +13,8 @@ export default class App extends React.Component {
         return (
             <Router>
                 <Switch>
+                    <Route exact path="/login" component={Mgr.Login}></Route>
                     <Route path="/" component={Mgr.Home}></Route>
-                    <Route path="/login" component={Mgr.Login}></Route>
                 </Switch>
             </Router>
         )
