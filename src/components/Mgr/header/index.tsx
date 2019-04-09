@@ -11,6 +11,8 @@ import './style.css'
 import * as avatar from '@assets/icon/icon_avatar.png'
 
 export default function (prop: Prop) {
+
+  let { accountName } = prop
   return (
     <Header>
       <div className="logo" />
@@ -24,7 +26,7 @@ export default function (prop: Prop) {
       </Menu>
       <div className="user">
         <img src={avatar} alt=""/>
-        <span className="accont-name">Goc</span>
+        <span className="accont-name">{accountName}</span>
       </div>
     </Header>
   )

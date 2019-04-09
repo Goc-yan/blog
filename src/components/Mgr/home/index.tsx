@@ -6,6 +6,10 @@ import Mgr from '@components/Mgr'
 import { Layout } from 'antd'
 const { Content } = Layout
 
+import { iState } from './models'
+
+import { getCookie } from '@utils/lib'
+
 import './style.css'
 
 
@@ -102,17 +106,27 @@ let subMenu = [{
 }]
 let breadcrumb = ['Home', 'List', 'App']
 
-export default class Component extends React.Component<any> {
+export default class Component extends React.Component<any, iState> {
+
 
     constructor(prop: any) {
         super(prop)
     }
 
+    componentWillMount() {
+
+        this.setState({
+            accountName: getCookie('accountName')
+        })
+    }
+
     render() {
+
+        let { accountName } = this.state
         return (
             <>
                 <Layout>
-                    <Mgr.Header data={menu} />
+                    <Mgr.Header data={menu} accountName={accountName} />
                     <Layout>
                         <Mgr.SubMenu data={subMenu} />
                         <Layout className="content-wrapper">

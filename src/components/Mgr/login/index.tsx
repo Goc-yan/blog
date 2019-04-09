@@ -1,27 +1,21 @@
 import * as React from 'react'
 import { Form, Icon, Input, Button, Checkbox } from 'antd';
 
-import { IResData, IArticle } from '@models'
-import { $get, $post } from '@utils/ajax'
+import { iState } from './models'
+// import { $get, $post } from '@utils/ajax'
+import { setCookie } from '@utils/lib'
 
 
 import './style.css'
 
-interface State {
-  data: IArticle[]
-}
 
-interface resArticles extends IResData {
-  data: IArticle[]
-}
-
-function hasErrors(fieldsError: any) {
-  return Object.keys(fieldsError).some(field => fieldsError[field]);
-}
+// function hasErrors(fieldsError: any) {
+//   return Object.keys(fieldsError).some(field => fieldsError[field]);
+// }
 
 
 
-class Component extends React.Component<any, State> {
+class Component extends React.Component<any, iState> {
 
   constructor(prop: any) {
     super(prop)
@@ -35,7 +29,8 @@ class Component extends React.Component<any, State> {
     e.preventDefault();
     this.props.form.validateFields((err: any, values: any) => {
       if (!err) {
-        console.log('Received values of form: ', values);
+        setCookie('accountName', values.userName, 1)
+        this.props.history.push({ pathname: '/' })
       }
     });
   }

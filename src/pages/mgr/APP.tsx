@@ -1,13 +1,22 @@
 import * as React from 'react'
-import { HashRouter as Router, Route, Switch } from 'react-router-dom'
+import { HashRouter as Router, Route,BrowserRouter, Switch, withRouter, RouteComponentProps } from 'react-router-dom'
 
 import Mgr from '@components/Mgr'
 
+import { getCookie } from '@utils/lib'
 
 import '../../styles/reset.css'
 
+type PathParamsType = {}
 
-export default class App extends React.Component {
+type PropsType = RouteComponentProps<PathParamsType> & {}
+
+class App extends React.Component<PropsType> {
+    
+    componentWillMount() {
+        let accountName = getCookie('accountName')
+        if (accountName === undefined) this.props.history.push('#/login')
+    }
 
     render() {
         return (
@@ -20,3 +29,5 @@ export default class App extends React.Component {
         )
     }
 }
+
+export default withRouter(App)

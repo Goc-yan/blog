@@ -1,3 +1,4 @@
 export interface Prop {
-    data: string[]
+    data: string[],
+    accountName: string
 }
