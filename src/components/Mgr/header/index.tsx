@@ -11,7 +11,6 @@ import './style.css'
 import * as avatar from '@assets/icon/icon_avatar.png'
 
 export default function (prop: Prop) {
-  console.log(avatar)
   return (
     <Header>
       <div className="logo" />
