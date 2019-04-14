@@ -19,11 +19,6 @@ connection.connect(err => {
 
 let query = sql => new Promise((resolve, reject) => connection.query(sql, (err, rows) => err ? reject(err) : resolve(rows)))
 
-// var sql = {
-//     connection,
-//     query
-// }
-
 module.exports = {
     connection,
     query

@@ -23,21 +23,12 @@ router.get('/', async function (req, res, next) {
 router.post('/', async function (req, res, next) {
 
     // 插入数据
-    var addSql = 'INSERT INTO categorys(id, category) VALUES(?,?)';
-    var querySql = 'SELECT * FROM categorys ORDER BY id DESC LIMIT 1'
-
+    var addSql = 'INSERT INTO categorys(category) VALUES(?)'
 
     // 获取数据
     var data = req.body
 
-    var queryData = await query(querySql)
-
-    id = queryData[0] ? queryData[0].id + 1 : 1
-
-    var addSqlParams = [
-        id,
-        data.category,
-    ];
+    var addSqlParams = [ data.category ];
 
     //增
     connection.query(addSql, addSqlParams, function (err, result) {
@@ -53,13 +44,10 @@ router.put('/', function (req, res, next) {
 
     var updateSql = 'UPDATE categorys SET category = \'' + data.category + '\' WHERE id = ' + data.id
 
-    console.log(updateSql)
-
     connection.query(updateSql, function (err, result) {
 
         err ? console.log('[SELECT ERROR] - ', err.message) : res.send(resData(0, result));
     });
-
 });
 
 // 移除分类

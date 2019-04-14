@@ -27,22 +27,17 @@ router.get('/', function (req, res, next) {
 router.post('/', async function (req, res, next) {
 
     // 插入数据
-    var addSql = 'INSERT INTO articles(id, title, createDate, updateDate, category, tags, content) VALUES(?,?,?,?,?,?,?)';
-    var querySql = 'SELECT * FROM articles ORDER BY id DESC LIMIT 1'
-
+    var addSql = 'INSERT INTO articles(title, createDate, updateDate, category, tags, content) VALUES(?,?,?,?,?,?)';
 
     // 获取数据
     var data = req.body
     var date = new Date().getTime()
 
     data.tags = data.tags.join(',')
-    var queryData = await query(querySql)
-    var id = queryData[0] ? queryData[0].id + 1 : 1
 
     if (queryData[0] === undefined) id = 1
 
     var addSqlParams = [
-        id,
         data.title,
         date,
         date,
@@ -71,7 +66,6 @@ router.put('/', function (req, res, next) {
     }
 
     var updateSql = 'UPDATE articles SET ' + tmp.join(',') + ' WHERE id = ' + data.id
-
 
     connection.query(updateSql, function (err, result) {
 

@@ -2,9 +2,7 @@ import axios from 'axios'
 
 import { Obj } from '@models'
 
-let ROOT_HOST: string
-ROOT_HOST = '//127.0.0.1:3000'
-// ROOT_HOST = ''
+let ROOT_HOST: string = ''
 
 let urlStringify = function (obj: Obj): string {
 

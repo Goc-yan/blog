@@ -7,7 +7,7 @@ var { connection, query } = require('../db')
 const resData = (errCode, data) => ({ errCode, data })
 
 // 获取所有标签
-router.get('/', async function (req, res, next) {
+router.get('/', function (req, res, next) {
 
     // SQL语句
     var sql = 'SELECT * FROM tags';
@@ -23,21 +23,12 @@ router.get('/', async function (req, res, next) {
 router.post('/', async function (req, res, next) {
 
     // 插入数据
-    var addSql = 'INSERT INTO tags(id, tagName) VALUES(?,?)';
-    var querySql = 'SELECT * FROM tags ORDER BY id DESC LIMIT 1'
-
+    var addSql = 'INSERT INTO tags (tagName) VALUES(?)';
 
     // 获取数据
     var data = req.body
 
-    var queryData = await query(querySql)
-
-    var id = queryData[0] ? queryData[0].id + 1 : 1
-
-    var addSqlParams = [
-        id,
-        data.tagName,
-    ];
+    var addSqlParams = [ data.tagName ];
 
     //增
     connection.query(addSql, addSqlParams, function (err, result) {
@@ -52,8 +43,6 @@ router.put('/', function (req, res, next) {
     var data = req.body
 
     var updateSql = 'UPDATE tags SET tagName = \'' + data.tagName + '\' WHERE id = ' + data.id
-
-    console.log(updateSql)
 
     connection.query(updateSql, function (err, result) {
 
