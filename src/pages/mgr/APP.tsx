@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { HashRouter as Router, Route,BrowserRouter, Switch, withRouter, RouteComponentProps } from 'react-router-dom'
+import { HashRouter as Router, Route, Switch, withRouter, RouteComponentProps } from 'react-router-dom'
 
 import Mgr from '@components/Mgr'
 
