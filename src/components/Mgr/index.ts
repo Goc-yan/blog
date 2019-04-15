@@ -3,6 +3,7 @@ import Blog from './blog'
 import FA from './FA'
 import Login from './login'
 import Header from './header'
+import Btngroup from './btngroup'
 import SubMenu from './subMenu'
 import Breadcrumb from './breadcrumb'
 import Articles from './articles'
@@ -16,6 +17,7 @@ export default {
     FA,
     Login,
     Header,
+    Btngroup,
     SubMenu,
     Breadcrumb,
     Articles,

@@ -23,8 +23,6 @@ export interface IResCategory extends IResData {
 }
 
 export interface IEditorState {
-    confirmDirty: boolean
-    autoCompleteResult: string[]
     selectedTags: number[]
 }
 

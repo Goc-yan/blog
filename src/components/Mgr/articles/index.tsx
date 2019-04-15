@@ -1,5 +1,6 @@
 import * as React from 'react'
 
+import Mgr from '@components/Mgr'
 import Editor from './editor'
 
 import { Button, Icon, Table } from 'antd'
@@ -36,7 +37,7 @@ export default class Component extends React.Component<object, IState> {
         render: (text: any, record: any) => {
           return (
             <span>
-              <a href="javascript:;" onClick={this.switchEditState.bind(this, record.id)}>编辑</a>
+              <a href="javascript:;" onClick={this.handleEditor.bind(this, record.id)}>编辑</a>
             </span>
           )
         },
@@ -50,7 +51,11 @@ export default class Component extends React.Component<object, IState> {
 
     this.onSelectChange = this.onSelectChange.bind(this);
     this.switchEditState = this.switchEditState.bind(this);
-    this.delete = this.delete.bind(this);
+    this.handleEditor = this.handleEditor.bind(this);
+    this.handleAdd = this.handleAdd.bind(this);
+    this.updateArticle = this.updateArticle.bind(this);
+    this.addArticle = this.addArticle.bind(this);
+    this.delArticle = this.delArticle.bind(this);
   }
 
   getTags() {
@@ -61,7 +66,6 @@ export default class Component extends React.Component<object, IState> {
       })
     })
   }
-
 
   getCategorys() {
     let _this = this
@@ -88,12 +92,15 @@ export default class Component extends React.Component<object, IState> {
 
     let _this = this
     ajax.$post('/api/articles', data, function (resData: IResData) {
-      console.log(resData)
+      if (resData.errCode === 0) {
+        _this.switchEditState()
+        _this.getData()
+      }
     })
   }
 
   // 删除文章
-  delete() {
+  delArticle() {
 
     let _this = this
     let options = {
@@ -102,6 +109,7 @@ export default class Component extends React.Component<object, IState> {
 
     ajax.$delete('/api/articles', options, function (resData: IResData): void {
       console.log(resData)
+      _this.getData()
     })
   }
 
@@ -109,28 +117,39 @@ export default class Component extends React.Component<object, IState> {
   updateArticle(data: IArticle) {
 
     let _this = this
+
     ajax.$put('/api/articles', data, function (resData: IResData) {
-      console.log(resData)
+      if (resData.errCode === 0) {
+        _this.switchEditState()
+        _this.getData()
+      }
     })
   }
 
   // 切换编辑状态
-  switchEditState(id: any) {
+  switchEditState() {
 
-    let state: boolean
-    let article: IArticle
+    let isEditor = this.state.isEditor
+    this.setState({
+      isEditor: !isEditor
+    })
+  }
 
-    state = this.state.isEditor
-    article = { id: null, title: '', content: '' }
-
-    if (!state) {
-      article = typeof id === 'number' ? this.state.data.filter(item => item.id === id)[0] : article
-    }
+  // 编辑文章 => 切换编辑状态，传入需编辑的文章
+  handleEditor(id: number) {
 
     this.setState({
-      isEditor: !this.state.isEditor,
-      article
+      article: this.state.data.filter(item => item.id === id)[0]
     })
+    this.switchEditState()
+  }
+  // 新增文章 => 切换编辑状态，传入空模板
+  handleAdd() {
+
+    this.setState({
+      article: { id: null, title: '', content: '' }
+    })
+    this.switchEditState()
   }
 
   // 复选框
@@ -146,7 +165,7 @@ export default class Component extends React.Component<object, IState> {
 
   render() {
 
-    const { selectedRowKeys } = this.state;
+    const { selectedRowKeys, isEditor } = this.state;
     const rowSelection = {
       selectedRowKeys,
       onChange: this.onSelectChange,
@@ -154,38 +173,25 @@ export default class Component extends React.Component<object, IState> {
 
     return (
       <div className="body">
-        <div className="btn-group">
-          {
-            this.state.isEditor
-              ? <Button
-                className="float-right"
-                onClick={this.switchEditState} >
-                <Icon type="left" />返回
-                </Button>
-              : <>
-                <Button
-                  className="float-right margin-left-20"
-                  type="danger"
-                  disabled={this.state.selectedRowKeys.length === 0}
-                  onClick={this.delete} >
-                  <Icon type="delete" /> 删除
-                  </Button>
-                <Button
-                  className="float-right"
-                  type="primary"
-                  onClick={this.switchEditState} >
-                  <Icon type="plus" />新增
-                  </Button>
-              </>
-          }
-        </div>
+        <Mgr.Btngroup 
+          selectedRowKeys={selectedRowKeys} 
+          isEditor={isEditor} 
+          handleAdd={this.handleAdd} 
+          handleDel={this.delArticle} 
+          handleSwitch={this.switchEditState} />
         {
-          this.state.isEditor
-            ? <Editor tags={this.state.tags} categorys={this.state.categorys} data={this.state.article} update={this.updateArticle} add={this.addArticle} />
-            : <Table rowKey={record => record.id.toString()}
-              rowSelection={rowSelection}
-              columns={this.state.columns}
-              dataSource={this.state.data} />
+          isEditor
+            ? <Editor 
+                tags={this.state.tags} 
+                categorys={this.state.categorys} 
+                data={this.state.article} 
+                add={this.addArticle}
+                update={this.updateArticle}  />
+            : <Table 
+                rowKey={record => record.id.toString()}
+                rowSelection={rowSelection}
+                columns={this.state.columns}
+                dataSource={this.state.data} />
         }
       </div>
     )

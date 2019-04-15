@@ -26,6 +26,8 @@ let devServer = isDev => isDev ? {
     }
 } : {}
 
+console.log(process.env.NODE_ENV)
+
 module.exports = function (env, argv) {
 
     const isDev = argv.mode === 'development'
