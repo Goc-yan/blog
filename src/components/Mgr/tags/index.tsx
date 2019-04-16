@@ -45,6 +45,7 @@ class Header extends React.Component<object, IState> {
       }],
     }
 
+    this.getData = this.getData.bind(this)
     this.onSelectChange = this.onSelectChange.bind(this)
     this.delete = this.delete.bind(this)
     this.showModal = this.showModal.bind(this)
@@ -68,13 +69,14 @@ class Header extends React.Component<object, IState> {
     let _this = this
 
     ajax.$post('/api/tags', data, function (resData: IResData): void {
-      console.log(resData)
 
       _this.setState({
         loading: false,
         visible: false,
         submitting: false
-      })
+      })     
+
+      _this.getData()
     })
   }
 
@@ -94,13 +96,16 @@ class Header extends React.Component<object, IState> {
 
     let _this = this
     ajax.$put('/api/tags', data, function (resData: IResData): void {
-      console.log(resData)
+
+      console.log(12121)
 
       _this.setState({
         loading: false,
         visible: false,
         submitting: false
       })
+
+      _this.getData()
     })
   }
 
