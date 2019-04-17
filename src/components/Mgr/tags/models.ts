@@ -18,5 +18,9 @@ export interface IResArticles extends IResData {
 export interface IProp {
     form: any
     data: ITag
-    setFormData: Function
+    onRef:  Function
+}
+
+export interface IEditorState {
+    tag: ITag
 }

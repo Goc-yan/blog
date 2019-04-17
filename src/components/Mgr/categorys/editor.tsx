@@ -2,27 +2,55 @@ import * as React from 'react'
 
 import { Form, Input } from 'antd'
 
-import { IProp } from './models'
+import { IProp, IEditorState } from './models'
 
 import './style.css'
+import { async, Promise } from 'q';
 
 
-class CategorysForm extends React.Component<IProp> {
+class CategorysForm extends React.Component<IProp, IEditorState> {
 
     constructor(prop: IProp) {
 
         super(prop)
-        this.setFormData = this.setFormData.bind(this)
+
+        this.state = {
+            category: {
+                id: null,
+                category: ''
+            }
+        }
+
+        this.handleChange = this.handleChange.bind(this)
     }
 
-    setFormData(e: any) {
-        this.props.setFormData({
-            id: this.props.data.id,
-            category: e.target.value
+    handleChange(event: any) {
+
+        let category = event.target.value
+        let data = this.state.category
+        data.category = category
+        // TODO: 写法有待改善
+        this.setState({
+            category: { ...data }
         })
     }
 
-    componentWillMount() { }
+    verification = function () {
+
+        return Promise((resolve, reject) => {
+            this.props.form.validateFields((err: any, values: any) => {
+                if (!err) resolve()
+            });
+        })
+    }
+
+    componentWillMount() {
+
+        this.props.onRef(this)
+        this.setState({
+            category: this.props.data
+        })
+    }
 
     render() {
 
@@ -33,17 +61,15 @@ class CategorysForm extends React.Component<IProp> {
             wrapperCol: { span: 18 },
         }
 
-        let { category } = this.props.data
-
         return (
             <Form {...formItemLayout}>
                 <Form.Item label="标签" >
                     {getFieldDecorator('category', {
-                        initialValue: category,
+                        initialValue: this.props.data.category,
                         rules: [{
                             required: true, message: 'Please input category name',
                         }],
-                    })(<Input onChange={this.setFormData} />)}
+                    })(<Input onChange={this.handleChange} />)}
                 </Form.Item>
             </Form>
         )

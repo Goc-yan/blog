@@ -18,5 +18,9 @@ export interface IResArticles extends IResData {
 export interface IProp {
     form: any
     data: ICategory
-    setFormData: Function
+    onRef: Function
+}
+
+export interface IEditorState {
+    category: ICategory
 }

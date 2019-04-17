@@ -12,6 +12,8 @@ import './style.css'
 
 class Header extends React.Component<object, IState> {
 
+  public child: any
+
   constructor(prop: object) {
     super(prop)
 
@@ -39,19 +41,36 @@ class Header extends React.Component<object, IState> {
         width: 100,
         render: (text: string, record: ITag) => (
           <span>
-            <a href="javascript:;" onClick={ this.showModal.bind(this, record) }>编辑</a>
+            <a href="javascript:;" onClick={this.showEditorModal.bind(this, record)}>编辑</a>
           </span>
         ),
       }],
     }
 
+    this.setDefaultData = this.setDefaultData.bind(this)
     this.getData = this.getData.bind(this)
     this.onSelectChange = this.onSelectChange.bind(this)
     this.delete = this.delete.bind(this)
-    this.showModal = this.showModal.bind(this)
+    this.showEditorModal = this.showEditorModal.bind(this)
     this.handleOk = this.handleOk.bind(this)
     this.handleCancel = this.handleCancel.bind(this)
-    this.getFormData = this.getFormData.bind(this)
+  }
+
+
+  onRef = (ref: any) => {
+    this.child = ref
+  }
+
+  setDefaultData() {
+    this.setState({
+      loading: false,
+      visible: false,
+      submitting: false,
+      editorData: {
+        id: null,
+        tagName: ''
+      }
+    })
   }
 
   getData() {
@@ -70,13 +89,9 @@ class Header extends React.Component<object, IState> {
 
     ajax.$post('/api/tags', data, function (resData: IResData): void {
 
-      _this.setState({
-        loading: false,
-        visible: false,
-        submitting: false
-      })     
-
-      _this.getData()
+      // 保存成功, 重新获取数据
+      if (resData.errCode === 0) _this.getData()
+      _this.setDefaultData()
     })
   }
 
@@ -88,7 +103,9 @@ class Header extends React.Component<object, IState> {
     }
 
     ajax.$delete('/api/tags', options, function (resData: IResData): void {
-      console.log(resData)
+
+      // 删除成功, 重新获取数据
+      if (resData.errCode === 0) _this.getData()
     })
   }
 
@@ -97,30 +114,17 @@ class Header extends React.Component<object, IState> {
     let _this = this
     ajax.$put('/api/tags', data, function (resData: IResData): void {
 
-      console.log(12121)
-
-      _this.setState({
-        loading: false,
-        visible: false,
-        submitting: false
-      })
-
-      _this.getData()
-    })
-  }
-
-  getFormData(editorData: ITag) {
-    this.setState({
-      editorData
+      // 更新成功, 重新获取数据
+      if (resData.errCode === 0) _this.getData()
+      _this.setDefaultData()
     })
   }
 
   onSelectChange(selectedRowKeys: number[]): void {
-    console.log('selectedRowKeys changed: ', selectedRowKeys)
     this.setState({ selectedRowKeys })
   }
 
-  showModal(data: any) {
+  showEditorModal(data: any) {
 
     let editorData: ITag = { id: null, tagName: '' }
     if (data.id) editorData = { ...data }
@@ -133,11 +137,15 @@ class Header extends React.Component<object, IState> {
 
   handleOk() {
 
-    this.setState({ loading: true, submitting: true })
+    let _this = this
 
-    let data = this.state.editorData
+    // TODO： 计划使用 await 优化结构
+    this.child.verification().then(function () {
 
-    data.id ? this.updateTag(data) : this.addTag(data)
+      _this.setState({ loading: true, submitting: true })
+      let data = _this.state.editorData
+      data.id ? _this.updateTag(data) : _this.addTag(data)
+    })
   }
 
   handleCancel() {
@@ -173,7 +181,7 @@ class Header extends React.Component<object, IState> {
           <Button
             className="float-right"
             type="primary"
-            onClick={this.showModal} >
+            onClick={this.showEditorModal} >
             <Icon type="plus" />新增
           </Button>
         </div>
@@ -181,20 +189,23 @@ class Header extends React.Component<object, IState> {
           rowSelection={rowSelection}
           columns={this.state.columns}
           dataSource={this.state.data} />
-        <Modal
-          visible={visible}
-          title={ editorData.id ? '修改标签' : '新增标签'}
-          onOk={this.handleOk}
-          onCancel={this.handleCancel}
-          footer={[
-            <Button key="back" onClick={this.handleCancel} disabled={submitting}>取消</Button>,
-            <Button key="submit" type="primary" loading={loading} onClick={this.handleOk}>
-              提交
-            </Button>,
-          ]}
-        >
-          <Editor ref='editorForm' data={editorData} setFormData={this.getFormData} />
-        </Modal>
+        {
+          visible
+            ? <Modal
+              visible={true}
+              title={editorData.id ? '修改标签' : '新增标签'}
+              onOk={this.handleOk}
+              onCancel={this.handleCancel}
+              footer={[
+                <Button key="back" onClick={this.handleCancel} disabled={submitting}>取消</Button>,
+                <Button key="submit" type="primary" loading={loading} onClick={this.handleOk}>
+                  提交
+                  </Button>
+              ]}>
+              <Editor onRef={this.onRef} data={editorData} />
+            </Modal>
+            : null
+        }
       </div>
     )
   }
