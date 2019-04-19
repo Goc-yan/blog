@@ -13,18 +13,34 @@ import { getCookie } from '@utils/lib'
 import './style.css'
 
 
+/** 获取一级导航 */
+let getNavType = function () {
+
+    let url = location.href
+    if (url.split('#/') && url.split('#/')[1]) {
+        let type = url.split('#/')[1].split('/')[0]
+        return type.replace(/^(\w)(\w*)/, function ($0, $1, $2) {
+            return $1.toUpperCase() + $2.toLowerCase();
+        })
+    }
+}
+
 let nav = [{
-    title: 'Blog',
+    name: 'Blog',
+    title: 'blog',
     options: [{
         title: 'subnav1',
         options: [{
             name: '文章管理',
+            title: 'article',
             router: '/blog/article'
         }, {
             name: '标签管理',
+            title: 'tag',
             router: '/blog/tag'
         }, {
             name: '分类管理',
+            title: 'category',
             router: '/blog/category'
         }]
     }, {
@@ -47,7 +63,8 @@ let nav = [{
         }]
     }]
 }, {
-    title: 'FA',
+    name: 'FA',
+    title: 'fa',
     options: [{
         title: 'subnav1',
         options: [{
@@ -72,7 +89,10 @@ let nav = [{
     }]
 }]
 
-let menu = nav.map(data => data.title)
+/** 一级导航 */
+let navType = getNavType()
+
+let menu = nav.map(data => data.name || data.title)
 let subMenu = [{
     title: 'subnav1',
     options: [{
@@ -104,7 +124,10 @@ let subMenu = [{
         router: '/'
     }]
 }]
-let breadcrumb = ['Home', 'List', 'App']
+
+subMenu = nav.filter(nav => nav.title === navType)[0].options
+
+let breadcrumb = [navType, 'List', 'App']
 
 export default class Component extends React.Component<any, iState> {
 
@@ -137,7 +160,7 @@ export default class Component extends React.Component<any, iState> {
                                         <Route
                                             exact
                                             path='/'
-                                            render={() => <Redirect to='/blog' />} />
+                                            render={() => <Redirect to={'/' + navType} />} />
                                         <Route path={`/blog`} component={Mgr.Blog} />
                                         <Route path={`/fa`} component={Mgr.FA} />
                                     </Switch>
