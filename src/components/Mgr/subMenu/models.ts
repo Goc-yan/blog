@@ -1,13 +1,5 @@
-export interface IOption {
-    router: string
-    name: string
-}
-
-export interface INav {
-    title: string
-    options: IOption[]
-}
+import { ISubNav } from '@models'
 
 export interface IProp {
-    data: INav[]
+    data: ISubNav[]
 }

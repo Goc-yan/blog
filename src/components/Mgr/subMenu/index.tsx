@@ -6,9 +6,12 @@ import { Layout, Menu, Icon } from 'antd';
 const { SubMenu } = Menu;
 const { Sider } = Layout;
 
-import { INav, IProp } from './models'
+import { ISubNav } from '@models'
+import { IProp } from './models'
 
-let getNavIndex = function (list: INav[], name: string): string {
+let getNavIndex = function (list: ISubNav[], name: string): string {
+
+  if(name === '/') return '0_0'
   for (let i1 in list) {
     let fn = list[i1]
     for (let i2 in fn.options) {
@@ -33,10 +36,10 @@ export default function (prop: IProp) {
           defaultOpenKeys={['0']}
           defaultSelectedKeys={[navIndex]}>
           {prop.data.map((subnav, index) => (
-            <SubMenu key={index} title={<span><Icon type="user" />{subnav.title}</span>}>
+            <SubMenu key={index} title={<span><Icon type="user" />{subnav.remark || subnav.name}</span>}>
               {subnav.options.map((option, index2) => (
                 <Menu.Item key={index + '_' + index2} >
-                  <Link to={option.router}>{option.name}</Link>
+                  <Link to={option.router}>{option.remark || subnav.name}</Link>
                 </Menu.Item>
               ))}
             </SubMenu>

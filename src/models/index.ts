@@ -35,3 +35,21 @@ export interface ICategory {
     category: string
 }
 
+export interface INavOption {
+    name: string
+    remark: string
+    router: string
+}
+
+export interface ISubNav {
+    name: string
+    remark: string
+    options: INavOption[]
+}
+
+export interface INav {
+    name: string
+    remark: string
+    options: ISubNav[]
+}
+

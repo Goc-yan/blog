@@ -6,130 +6,129 @@ import Mgr from '@components/Mgr'
 import { Layout } from 'antd'
 const { Content } = Layout
 
-import { iState } from './models'
+import { INav, ISubNav } from '@models'
+import { IState } from './models'
 
 import { getCookie } from '@utils/lib'
 
 import './style.css'
 
+// 获取导航数据
+let getMenuData = function (data: INav[]) {
 
-/** 获取一级导航 */
-let getNavType = function () {
+    let urlParams = location.href.split('#/')[1]
 
-    let url = location.href
-    if (url.split('#/') && url.split('#/')[1]) {
-        let type = url.split('#/')[1].split('/')[0]
-        return type.replace(/^(\w)(\w*)/, function ($0, $1, $2) {
-            return $1.toUpperCase() + $2.toLowerCase();
-        })
+    /** 一级菜单 */
+    let mainMenu: string = ''
+    /** 二级菜单 */
+    let secondNav: string = ''
+    /** 三级菜单 */
+    let lastMenu: string = ''
+
+    if (urlParams && urlParams.split('/').length === 2) {
+        [mainMenu, lastMenu] = urlParams.split('/')
+    } else {
+        mainMenu = data[0].name
+        secondNav = data[0].options[0].name
+        lastMenu = data[0].options[0].options[0].name
     }
+
+    /** 二级菜单 */
+    subMenu = menuData.filter(subMenu => subMenu.name === mainMenu)[0].options
+
+    if (secondNav === '') secondNav = subMenu.filter(subMenu => subMenu.options.filter(op => op.name === lastMenu).length === 1)[0].name
+
+    breadcrumb = [mainMenu, secondNav, lastMenu]
 }
 
-let nav = [{
-    name: 'Blog',
-    title: 'blog',
+let menuData: INav[] = [{
+    name: 'blog',
+    remark: 'Blog',
     options: [{
-        title: 'subnav1',
+        name: 'subnav1',
+        remark: '',
         options: [{
-            name: '文章管理',
-            title: 'article',
+            name: 'article',
+            remark: '文章管理',
             router: '/blog/article'
         }, {
-            name: '标签管理',
-            title: 'tag',
+            name: 'tag',
+            remark: '标签管理',
             router: '/blog/tag'
         }, {
-            name: '分类管理',
-            title: 'category',
+            name: 'category',
+            remark: '分类管理',
             router: '/blog/category'
         }]
     }, {
-        title: 'subnav2',
+        name: 'subnav2',
+        remark: '',
         options: [{
             name: 'option1',
+            remark: '',
             router: '/'
         }, {
             name: 'option2',
+            remark: '',
             router: '/'
         }]
     }, {
-        title: 'subnav3',
+        name: 'subnav3',
+        remark: '',
         options: [{
             name: 'option3',
+            remark: '',
             router: '/'
         }, {
             name: 'option4',
+            remark: '',
             router: '/'
         }]
     }]
 }, {
-    name: 'FA',
-    title: 'fa',
+    name: 'fa',
+    remark: 'FA',
     options: [{
-        title: 'subnav1',
+        name: 'subnav1',
+        remark: '',
         options: [{
-            name: '基金管理',
+            name: 'fund',
+            remark: '基金管理',
             router: '/fa/fund'
         }, {
-            name: '股票管理',
-            router: '/fa/tag'
+            name: 'stock',
+            remark: '股票管理',
+            router: '/fa/stock'
         }]
     }]
 }, {
-    title: 'Menu3',
+    name: 'menu3',
+    remark: 'Menu3',
     options: [{
-        title: 'subnav1',
+        name: 'subnav1',
+        remark: 'Menu3',
         options: [{
-            name: '基金管理',
-            router: '/fa/fund'
+            name: 'other',
+            remark: '其他',
+            router: '/fa/other'
         }, {
-            name: '股票管理',
-            router: '/fa/tag'
+            name: 'other',
+            remark: '其他',
+            router: '/fa/other'
         }]
     }]
 }]
 
-/** 一级导航 */
-let navType = getNavType()
 
-let menu = nav.map(data => data.name || data.title)
-let subMenu = [{
-    title: 'subnav1',
-    options: [{
-        name: '文章管理',
-        router: '/blog/article'
-    }, {
-        name: '标签管理',
-        router: '/blog/tag'
-    }, {
-        name: '分类管理',
-        router: '/blog/category'
-    }]
-}, {
-    title: 'subnav2',
-    options: [{
-        name: 'option1',
-        router: '/'
-    }, {
-        name: 'option2',
-        router: '/'
-    }]
-}, {
-    title: 'subnav3',
-    options: [{
-        name: 'option3',
-        router: '/'
-    }, {
-        name: 'option4',
-        router: '/'
-    }]
-}]
+/** 菜单 */
+let menu: string[] = menuData.map(menu => menu.remark || menu.name)
+/** 二级菜单 */
+let subMenu: ISubNav[]
+/** 获取面包屑导航 */
+let breadcrumb: string[]
 
-subMenu = nav.filter(nav => nav.title === navType)[0].options
 
-let breadcrumb = [navType, 'List', 'App']
-
-export default class Component extends React.Component<any, iState> {
+export default class Component extends React.Component<any, IState> {
 
 
     constructor(prop: any) {
@@ -138,9 +137,15 @@ export default class Component extends React.Component<any, iState> {
 
     componentWillMount() {
 
+        getMenuData(menuData)
+
         this.setState({
             accountName: getCookie('accountName')
         })
+    }
+
+    componentWillReceiveProps() {
+        getMenuData(menuData)
     }
 
     render() {
@@ -149,7 +154,7 @@ export default class Component extends React.Component<any, iState> {
         return (
             <>
                 <Layout>
-                    <Mgr.Header data={menu} accountName={accountName} />
+                    <Mgr.Header data={menu} accountName={accountName} mainMenu={breadcrumb[0]}  />
                     <Layout>
                         <Mgr.SubMenu data={subMenu} />
                         <Layout className="content-wrapper">
@@ -160,7 +165,7 @@ export default class Component extends React.Component<any, iState> {
                                         <Route
                                             exact
                                             path='/'
-                                            render={() => <Redirect to={'/' + navType} />} />
+                                            render={() => <Redirect to={'/blog'} />} />
                                         <Route path={`/blog`} component={Mgr.Blog} />
                                         <Route path={`/fa`} component={Mgr.FA} />
                                     </Switch>

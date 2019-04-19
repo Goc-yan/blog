@@ -12,7 +12,11 @@ import * as avatar from '@assets/icon/icon_avatar.png'
 
 export default function (prop: Prop) {
 
-  let { accountName } = prop
+
+  let { data, accountName, mainMenu } = prop
+  let tmp = data.map(d => d.toLowerCase())
+
+
   return (
     <Header>
       <div className="logo" />
@@ -20,9 +24,9 @@ export default function (prop: Prop) {
         theme="dark"
         mode="horizontal"
         className="float-left"
-        defaultSelectedKeys={['0']}
+        defaultSelectedKeys={[ String(tmp.indexOf(mainMenu)) ]}
         style={{ lineHeight: '64px' }} >
-        {prop.data.map((nav, index) => <Menu.Item key={index} ><Link to={'/' + nav.toLowerCase()}>{nav}</Link></Menu.Item>)}
+        {data.map((nav, index) => <Menu.Item key={index} ><Link to={'/' + nav.toLowerCase()}>{nav}</Link></Menu.Item>)}
       </Menu>
       <div className="user">
         <img src={avatar} alt=""/>

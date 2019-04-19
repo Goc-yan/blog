@@ -1,3 +1,3 @@
-export interface iState {
+export interface IState {
     accountName: string
 }
