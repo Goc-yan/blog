@@ -41,6 +41,33 @@ let getMenuData = function (data: INav[]) {
     breadcrumb = [mainMenu, secondNav, lastMenu]
 }
 
+/** 获取面包屑导航 */
+let getBreadcrumb = function (data: INav[]) {
+
+    let urlParams = location.href.split('#/')[1]
+
+    /** 一级菜单 */
+    let mainMenu: string = ''
+    /** 二级菜单 */
+    let secondMenu: string = ''
+    /** 三级菜单 */
+    let lastMenu: string = ''
+    
+    
+    if (urlParams && urlParams.split('/').length === 2) {
+
+        let subMenu
+        [mainMenu, lastMenu] = urlParams.split('/')
+        subMenu = data.filter(menu => menu.name === mainMenu)[0]
+        secondMenu = subMenu.options.filter(subMenu => subMenu.options.filter(op => op.name === lastMenu).length === 1)[0].name
+    } else {
+        mainMenu = data[0].name
+        secondMenu = data[0].options[0].name
+        lastMenu = data[0].options[0].options[0].name
+    }
+    return [mainMenu, secondMenu, lastMenu]
+}
+
 let menuData: INav[] = [{
     name: 'blog',
     remark: 'Blog',
@@ -119,13 +146,13 @@ let menuData: INav[] = [{
     }]
 }]
 
-
+/** 获取面包屑导航 */
+let breadcrumb: string[] = getBreadcrumb(menuData)
 /** 菜单 */
 let menu: string[] = menuData.map(menu => menu.remark || menu.name)
 /** 二级菜单 */
-let subMenu: ISubNav[]
-/** 获取面包屑导航 */
-let breadcrumb: string[]
+let subMenu: ISubNav[] = menuData.filter(menu => menu.name === breadcrumb[0])[0].options
+
 
 
 export default class Component extends React.Component<any, IState> {
@@ -137,15 +164,15 @@ export default class Component extends React.Component<any, IState> {
 
     componentWillMount() {
 
-        getMenuData(menuData)
-
         this.setState({
             accountName: getCookie('accountName')
         })
     }
 
     componentWillReceiveProps() {
-        getMenuData(menuData)
+        breadcrumb = getBreadcrumb(menuData)
+        subMenu = menuData.filter(menu => menu.name === breadcrumb[0])[0].options
+
     }
 
     render() {
@@ -154,7 +181,7 @@ export default class Component extends React.Component<any, IState> {
         return (
             <>
                 <Layout>
-                    <Mgr.Header data={menu} accountName={accountName} mainMenu={breadcrumb[0]}  />
+                    <Mgr.Header data={menu} accountName={accountName} mainMenu={breadcrumb[0]} />
                     <Layout>
                         <Mgr.SubMenu data={subMenu} />
                         <Layout className="content-wrapper">
