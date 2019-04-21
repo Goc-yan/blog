@@ -1,4 +1,4 @@
-import { ISubNav } from '@models'
+import { INav, ISubNav } from '@models'
 
 export interface IProp {
     data: ISubNav[]

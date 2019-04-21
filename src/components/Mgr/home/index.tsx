@@ -13,34 +13,6 @@ import { getCookie } from '@utils/lib'
 
 import './style.css'
 
-// 获取导航数据
-let getMenuData = function (data: INav[]) {
-
-    let urlParams = location.href.split('#/')[1]
-
-    /** 一级菜单 */
-    let mainMenu: string = ''
-    /** 二级菜单 */
-    let secondNav: string = ''
-    /** 三级菜单 */
-    let lastMenu: string = ''
-
-    if (urlParams && urlParams.split('/').length === 2) {
-        [mainMenu, lastMenu] = urlParams.split('/')
-    } else {
-        mainMenu = data[0].name
-        secondNav = data[0].options[0].name
-        lastMenu = data[0].options[0].options[0].name
-    }
-
-    /** 二级菜单 */
-    subMenu = menuData.filter(subMenu => subMenu.name === mainMenu)[0].options
-
-    if (secondNav === '') secondNav = subMenu.filter(subMenu => subMenu.options.filter(op => op.name === lastMenu).length === 1)[0].name
-
-    breadcrumb = [mainMenu, secondNav, lastMenu]
-}
-
 /** 获取面包屑导航 */
 let getBreadcrumb = function (data: INav[]) {
 
@@ -119,6 +91,18 @@ let menuData: INav[] = [{
         name: 'subnav1',
         remark: '',
         options: [{
+            name: 'option1',
+            remark: '',
+            router: '/'
+        }, {
+            name: 'option2',
+            remark: '',
+            router: '/'
+        }]
+    }, {
+        name: 'subnav2',
+        remark: '',
+        options: [{
             name: 'fund',
             remark: '基金管理',
             router: '/fa/fund'
@@ -153,8 +137,6 @@ let menu: string[] = menuData.map(menu => menu.remark || menu.name)
 /** 二级菜单 */
 let subMenu: ISubNav[] = menuData.filter(menu => menu.name === breadcrumb[0])[0].options
 
-
-
 export default class Component extends React.Component<any, IState> {
 
 
@@ -164,6 +146,9 @@ export default class Component extends React.Component<any, IState> {
 
     componentWillMount() {
 
+        
+        console.log('subMenu: 切换主导航, 副导航UI不更新')
+
         this.setState({
             accountName: getCookie('accountName')
         })
@@ -172,7 +157,6 @@ export default class Component extends React.Component<any, IState> {
     componentWillReceiveProps() {
         breadcrumb = getBreadcrumb(menuData)
         subMenu = menuData.filter(menu => menu.name === breadcrumb[0])[0].options
-
     }
 
     render() {

@@ -1,7 +1,11 @@
 export interface IProp {
-    isEditor: boolean
+    isEdited: boolean
     selectedRowKeys: number[]
     handleDel: () => void
     handleAdd: () => void
     handleSwitch: () => void
+}
+
+export interface IState {
+    visible: boolean
 }

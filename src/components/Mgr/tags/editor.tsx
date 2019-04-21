@@ -4,8 +4,9 @@ import { Form, Input } from 'antd'
 
 import { IProp, IEditorState } from './models'
 
-import './style.css'
 import { async, Promise } from 'q';
+
+import './style.css'
 
 
 class TagsForm extends React.Component<IProp, IEditorState> {
@@ -56,10 +57,7 @@ class TagsForm extends React.Component<IProp, IEditorState> {
 
         const { getFieldDecorator } = this.props.form
 
-        const formItemLayout = {
-            labelCol: { span: 4 },
-            wrapperCol: { span: 18 },
-        }
+        const formItemLayout = { labelCol: { span: 4 }, wrapperCol: { span: 18 } }
 
         return (
             <Form {...formItemLayout}>

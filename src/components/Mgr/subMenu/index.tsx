@@ -25,7 +25,8 @@ let getNavIndex = function (list: ISubNav[], name: string): string {
 export default function (prop: IProp) {
 
   let url = '/' + window.location.href.split('#/')[1]
-  let navIndex = getNavIndex(prop.data, url)
+  let navIndex = getNavIndex(prop.data, url)  
+  let defaultOpenKeys = navIndex.split('_')[0].toString()
 
   return (
     <HashRouter>
@@ -33,7 +34,7 @@ export default function (prop: IProp) {
         <Menu
           className="menu"
           mode="inline"
-          defaultOpenKeys={['0']}
+          defaultOpenKeys={[defaultOpenKeys]}
           defaultSelectedKeys={[navIndex]}>
           {prop.data.map((subnav, index) => (
             <SubMenu key={index} title={<span><Icon type="user" />{subnav.remark || subnav.name}</span>}>

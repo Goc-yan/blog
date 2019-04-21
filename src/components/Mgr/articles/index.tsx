@@ -1,6 +1,7 @@
 import * as React from 'react'
 
 import Mgr from '@components/Mgr'
+import Common from '@components/Common'
 import Editor from './editor'
 
 import { Button, Icon, Table } from 'antd'
@@ -173,9 +174,9 @@ export default class Component extends React.Component<object, IState> {
 
     return (
       <div className="body">
-        <Mgr.Btngroup 
+        <Common.Btngroup 
           selectedRowKeys={selectedRowKeys} 
-          isEditor={isEditor} 
+          isEdited={isEditor} 
           handleAdd={this.handleAdd} 
           handleDel={this.delArticle} 
           handleSwitch={this.switchEditState} />

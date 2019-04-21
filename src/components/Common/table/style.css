@@ -1,0 +1,27 @@
+.float-right {
+    float: right;
+}
+
+.margin-left-20 {
+    margin-left: 20px
+}
+
+th.column-id,
+td.column-id {
+  text-align: left !important;
+}
+
+.btn-group {
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.quill {
+    height: 200px;
+    line-height: 20px;
+}
+
+.ql-snow {
+    float: left;
+    width: 100%;
+}

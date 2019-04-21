@@ -20,7 +20,7 @@ export default class Component extends React.Component<any> {
                         path={`${this.props.match.path}/`}
                         render={() => <Redirect to={`${this.props.match.path}/fund`} />}
                     />
-                    <Route path={`${this.props.match.path}/fund`} component={Mgr.Articles} />
+                    <Route path={`${this.props.match.path}/fund`} component={Mgr.Fund} />
                     <Route path={`${this.props.match.path}/stock`} component={Mgr.Articles} />
                 </Switch>
             </HashRouter>            

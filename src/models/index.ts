@@ -11,7 +11,7 @@ export interface IResData {
 
 export interface ITableColumn {
     title: string,
-    width: number,
+    width?: number,
     key?: string,
     dataIndex?: string
     render?: any
