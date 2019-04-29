@@ -1,3 +1,9 @@
+let crypto = require("crypto")
+// let { ENCRYPTION_TIMES, ENCRYPTION_SECRET } = require("../config/private")
+
+const ENCRYPTION_TIMES = 10
+const ENCRYPTION_SECRET = '47398d63768aB877'
+
 let content = `
 # 谈谈跨域
 
@@ -18,6 +24,29 @@ test
 `
 
 const proxy = {
+
+    // 登录
+    'POST /api/login': function (req, res) {
+
+        let content = 'userName=' + req.body.userName + '&timestamp=' + req.body.timestamp
+        let hash = crypto.createHmac('sha1', ENCRYPTION_SECRET).update(content).digest('hex')
+        for (var i = 1; i < ENCRYPTION_TIMES; i++) {
+            hash = crypto.createHmac('sha1', ENCRYPTION_SECRET).update(hash).digest('hex')
+        }
+        console.log('hash:', hash)
+
+        var resData = {
+            errCode: 0,
+            errMsg: '登陆成功'
+        }
+
+        // res.writeHead(200, {
+        //     'Set-Cookie': 'myCookie=test',
+        //     'Content-Type': 'text/plain'
+        // });
+
+        res.send(resData)
+    },
 
     // 文章
     'POST /api/articles': function (req, res) {

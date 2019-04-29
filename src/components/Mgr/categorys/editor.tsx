@@ -39,7 +39,7 @@ class CategorysForm extends React.Component<IProp, IEditorState> {
 
         return Promise((resolve, reject) => {
             this.props.form.validateFields((err: any, values: any) => {
-                if (!err) resolve()
+                if (!err) resolve(values)
             });
         })
     }

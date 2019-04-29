@@ -140,10 +140,11 @@ class Header extends React.Component<object, IState> {
     let _this = this
 
     // TODO： 计划使用 await 优化结构
-    this.child.verification().then(function () {
+    this.child.verification().then(function (values: any) {
 
       _this.setState({ loading: true, submitting: true })
       let data = _this.state.editorData
+      data.tagName = values.tagName
       data.id ? _this.updateTag(data) : _this.addTag(data)
     })
   }

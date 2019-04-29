@@ -2,7 +2,7 @@ import * as React from 'react'
 import { Form, Icon, Input, Button, Checkbox } from 'antd';
 
 import { iState } from './models'
-// import { $get, $post } from '@utils/ajax'
+import { $get, $post } from '@utils/ajax'
 import { setCookie } from '@utils/lib'
 
 
@@ -25,12 +25,26 @@ class Component extends React.Component<any, iState> {
     }
   }
 
+
+
   handleSubmit = (e: any) => {
+
+    let that = this
     e.preventDefault();
     this.props.form.validateFields((err: any, values: any) => {
       if (!err) {
-        setCookie('accountName', values.userName, 1)
-        this.props.history.push({ pathname: '/' })
+        var data = {
+          userName: values.userName,
+          password: values.password,
+          timestamp: new Date().getTime()
+        }
+        $post('/api/login', data, function (resDate: any) {
+
+          if (resDate.errCode !== 0) throw resDate.errMsg
+
+          setCookie('accountName', values.userName, 1)
+          that.props.history.push({ pathname: '/' })
+        })
       }
     });
   }

@@ -16,9 +16,19 @@ router.get('/', function (req, res, next) {
 
     connection.query(sql, function (err, result) {
 
-        result.forEach(data => data.tags = data.tags.split(',').map(str => Number(str)))
+        try {
 
-        err ? console.log('[SELECT ERROR] - ', err.message) : res.send(resData(0, result));
+            if (result && Array.isArray(result)) {
+                result.forEach(data => data.tags = data.tags.split(',').map(str => Number(str)))
+                err ? console.log('[SELECT ERROR] - ', err.message) : res.send(resData(0, result));
+            } else {
+                res.send(resData(0, []));
+            }
+
+        } catch (e) {
+            console.log(e)
+        }
+
     });
 
 });
