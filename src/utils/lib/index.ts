@@ -2,7 +2,7 @@ import { Obj } from '@models'
 import * as inf from './models'
 
 export const getUrlParams: inf.iGetUrlParams = function () {
-    let params: Obj
+    let params: Obj = {}
     let urlParams: string = window.location.href.split('?')[1]
     if (urlParams) {
         urlParams.split('&').forEach(data => {

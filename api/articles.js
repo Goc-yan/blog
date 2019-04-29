@@ -45,8 +45,6 @@ router.post('/', async function (req, res, next) {
 
     data.tags = data.tags.join(',')
 
-    if (queryData[0] === undefined) id = 1
-
     var addSqlParams = [
         data.title,
         date,
