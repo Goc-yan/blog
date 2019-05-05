@@ -41,8 +41,6 @@ class Component extends React.Component<any, iState> {
         $post('/api/login', data, function (resDate: any) {
 
           if (resDate.errCode !== 0) throw resDate.errMsg
-
-          setCookie('accountName', values.userName, 1)
           that.props.history.push({ pathname: '/' })
         })
       }

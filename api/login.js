@@ -15,7 +15,7 @@ const createToken = (name, timestamp) => sha512(`name=${name}&timestamp=${timest
 // 登陆
 router.post('/', function (req, res, next) {
     
-    let { userName, password } = req.body
+    let { userName, password, timestamp } = req.body
     
     let name = userName
     let pwd = md5(password)
@@ -32,9 +32,9 @@ router.post('/', function (req, res, next) {
         
         if (result.length === 0) res.send(resErr(1, '用户名或密码错误'));
         
-        let token = createToken()
+        let token = createToken(name, timestamp)
 
-        res.setHeader("Set-Cookie", ['name=' + name, 'timestamp=' + new Date().getTime(), 'token=' + token]);
+        res.setHeader("Set-Cookie", ['name=' + name + ';path=/', 'timestamp=' + timestamp + ';path=/', 'token=' + token + ';path=/']);
 
         res.send(resData(0, '登陆成功'))
     });

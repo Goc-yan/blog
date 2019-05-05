@@ -40,12 +40,27 @@ let allowCrossDomain = function (req, res, next) {
 // 验证用户合法性
 let verification = function (req, res, next) {
 
-  if (req.method !== 'GET') {
-    let cookie = req.headers.cookie
+  console.log('verification', req.method)
+
+  if (req.method !== 'GET' && req.path !== '/api/login') {
+    let cookie = {}
+    
+    req.headers.cookie.split(';').forEach(item => {
+      item = item.trim()
+      let [k, v] = item.split('=')
+      cookie[k] = v
+    })
+
     let { name, timestamp, token } = cookie
 
-    if (sha512(`name=${name}&timestamp=${timestamp}`) !== token) {
-      console.log('token 不一致')
+    if (sha512(`name=${name}&timestamp=${timestamp}`) !== token || (new Date().getTime() - timestamp > 24 * 60 * 60 * 1000)) {
+      console.log('令牌无效, 重新登陆')
+      res.send({
+        errCode: 2,
+        errMsg: '令牌无效, 请重新登陆'
+      })
+      return
+      // res.redirect(302, '#/login')
     }
   }
   next()

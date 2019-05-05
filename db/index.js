@@ -6,7 +6,7 @@ var PRIVATE = require('../config/private')
 
 //创建连接
 var connection = mysql.createConnection({
-    host: PRIVATE.BASE_HOST,
+    host: PRIVATE.SQL_HOST,
     port: '3306',
     user: PRIVATE.SQL_USER,
     password: PRIVATE.SQL_PWD,

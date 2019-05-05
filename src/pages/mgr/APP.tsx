@@ -14,7 +14,7 @@ type PropsType = RouteComponentProps<PathParamsType> & {}
 class App extends React.Component<PropsType> {
     
     componentWillMount() {
-        let accountName = getCookie('accountName')
+        let accountName = getCookie('name')
         if (accountName === undefined) this.props.history.push('#/login')
     }
 

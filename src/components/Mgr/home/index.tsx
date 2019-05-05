@@ -150,7 +150,7 @@ export default class Component extends React.Component<any, IState> {
         console.log('subMenu: 切换主导航, 副导航UI不更新')
 
         this.setState({
-            accountName: getCookie('accountName')
+            accountName: getCookie('name')
         })
     }
 
