@@ -1,14 +1,16 @@
-var createError = require('http-errors')
-var express = require('express')
-var path = require('path')
-var cookieParser = require('cookie-parser')
-var logger = require('morgan')
+let createError = require('http-errors')
+let express = require('express')
+let path = require('path')
+let cookieParser = require('cookie-parser')
+let logger = require('morgan')
 
-var indexRouter = require('./routes/index')
-var mgrRouter = require('./routes/mgr')
-var api = require('./api')
+let { sha512 } = require('./utils')
 
-var app = express()
+let indexRouter = require('./routes/index')
+let mgrRouter = require('./routes/mgr')
+let api = require('./api')
+
+let app = express()
 
 // view engine setup
 app.set('views', path.join(__dirname, 'dist', 'pages'))
@@ -23,19 +25,34 @@ app.use(express.static(path.join(__dirname, 'dist')))
 
 
 // CROS
-var allowCrossDomain = function (req, res, next) {
+let allowCrossDomain = function (req, res, next) {
   // res.header("Access-Control-Allow-Credentials", true)
   res.header("Access-Control-Allow-Origin", "*")
   res.header("Access-Control-Allow-Headers", "X-Requested-With,Content-Type")
   res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS")
-  res.header("X-Powered-By", ' 3.2.1')
+  res.header("X-Powered-By", '3.2.1')
   // res.header("Content-Type", "application/jsoncharset=utf-8")
 
   if (req.method === 'OPTIONS') res.sendStatus(200)
   else next()
 }
 
+// 验证用户合法性
+let verification = function (req, res, next) {
+
+  if (req.method !== 'GET') {
+    let cookie = req.headers.cookie
+    let { name, timestamp, token } = cookie
+
+    if (sha512(`name=${name}&timestamp=${timestamp}`) !== token) {
+      console.log('token 不一致')
+    }
+  }
+  next()
+}
+
 app.use(allowCrossDomain)
+app.use(verification)
 app.use('/api', api)
 app.use('/', indexRouter)
 app.use('/mgr', mgrRouter)
