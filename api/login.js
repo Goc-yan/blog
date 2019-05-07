@@ -1,7 +1,7 @@
 let express = require('express');
 let router = express.Router();
 
-let { md5, sha512 } = require('../utils')
+let { md5, sha512, createCookie } = require('../utils')
 
 // 连接数据库
 let { connection } = require('../db')
@@ -16,6 +16,7 @@ const createToken = (name, timestamp) => sha512(`name=${name}&timestamp=${timest
 router.post('/', function (req, res, next) {
     
     let { userName, password, timestamp } = req.body
+    console.log(req.body)
     
     let name = userName
     let pwd = md5(password)
@@ -34,7 +35,9 @@ router.post('/', function (req, res, next) {
         
         let token = createToken(name, timestamp)
 
-        res.setHeader("Set-Cookie", ['name=' + name + ';path=/', 'timestamp=' + timestamp + ';path=/', 'token=' + token + ';path=/']);
+        let cookieList = createCookie(name, timestamp, token)
+
+        res.setHeader("Set-Cookie", cookieList);
 
         res.send(resData(0, '登陆成功'))
     });

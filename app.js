@@ -4,7 +4,7 @@ let path = require('path')
 let cookieParser = require('cookie-parser')
 let logger = require('morgan')
 
-let { sha512 } = require('./utils')
+let { sha512, createCookie } = require('./utils')
 
 let indexRouter = require('./routes/index')
 let mgrRouter = require('./routes/mgr')
@@ -37,30 +37,46 @@ let allowCrossDomain = function (req, res, next) {
   else next()
 }
 
+let getCookie = (cookie) => {
+
+  let res = {}
+
+  if (cookie) {
+    cookie.split(';').forEach(item => {
+      item = item.trim()
+      let [k, v] = item.split('=')
+      res[k] = v
+    })
+  }
+
+  return res
+}
+
 // 验证用户合法性
 let verification = function (req, res, next) {
 
-  console.log('verification', req.method)
+
+  let cookie = getCookie(req.headers.cookie)
+  let currentTimestamp = new Date().getTime()
+  let { name, timestamp, token } = cookie
 
   if (req.method !== 'GET' && req.path !== '/api/login') {
-    let cookie = {}
-    
-    req.headers.cookie.split(';').forEach(item => {
-      item = item.trim()
-      let [k, v] = item.split('=')
-      cookie[k] = v
-    })
 
-    let { name, timestamp, token } = cookie
-
-    if (sha512(`name=${name}&timestamp=${timestamp}`) !== token || (new Date().getTime() - timestamp > 24 * 60 * 60 * 1000)) {
-      console.log('令牌无效, 重新登陆')
+    if (sha512(`name=${name}&timestamp=${timestamp}`) !== token || (currentTimestamp - timestamp > 24 * 60 * 60 * 1000)) {
       res.send({
-        errCode: 2,
+        errCode: 1001, // 鉴权失效
         errMsg: '令牌无效, 请重新登陆'
       })
       return
-      // res.redirect(302, '#/login')
+    }
+  }
+
+  if (req.path !== '/api/login' && req.headers.cookie) {
+
+    if (timestamp && currentTimestamp - timestamp > 1 * 60 * 1000 && currentTimestamp - timestamp < 30 * 60 * 1000) {
+      let cookieList = createCookie(name, currentTimestamp, token)
+      console.log(cookieList)
+      res.setHeader("Set-Cookie", cookieList);
     }
   }
   next()
