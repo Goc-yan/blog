@@ -1,4 +1,4 @@
-import { ITableColumn, IResData, IArticle, ICategory, ITag } from '@models'
+import { ITableColumn, IResData, IArticle, IEditorArticle, ICategory, ITag } from '@models'
 
 export interface IState {
     data: IArticle[]
@@ -7,7 +7,7 @@ export interface IState {
     selectedRowKeys: number[]
     columns: ITableColumn[]
     isEditor: boolean
-    article: IArticle
+    article: IEditorArticle
 }
 
 export interface IResArticles extends IResData {
@@ -28,7 +28,7 @@ export interface IEditorState {
 
 export interface IProp {
     form: any
-    data: IArticle
+    data: IEditorArticle
     tags: ITag[]
     categorys: ICategory[]
     update: any

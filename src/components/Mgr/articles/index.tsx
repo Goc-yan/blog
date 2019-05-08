@@ -1,10 +1,9 @@
 import * as React from 'react'
 
-import Mgr from '@components/Mgr'
 import Common from '@components/Common'
 import Editor from './editor'
 
-import { Button, Icon, Table } from 'antd'
+import { Table } from 'antd'
 
 import * as ajax from '@utils/ajax'
 
@@ -44,10 +43,7 @@ export default class Component extends React.Component<object, IState> {
         },
       }],
       isEditor: false,
-      article: {
-        title: '',
-        content: ''
-      }
+      article: {}
     }
 
     this.onSelectChange = this.onSelectChange.bind(this);
@@ -59,6 +55,7 @@ export default class Component extends React.Component<object, IState> {
     this.delArticle = this.delArticle.bind(this);
   }
 
+  /** 获取标签 */
   getTags() {
     let _this = this
     ajax.$get('/api/tags', function (resData: IResTags): void {
@@ -68,6 +65,7 @@ export default class Component extends React.Component<object, IState> {
     })
   }
 
+  /** 获取分类 */
   getCategorys() {
     let _this = this
     ajax.$get('/api/categorys', function (resData: IResCategory): void {
@@ -144,6 +142,7 @@ export default class Component extends React.Component<object, IState> {
     })
     this.switchEditState()
   }
+  
   // 新增文章 => 切换编辑状态，传入空模板
   handleAdd() {
 

@@ -67,9 +67,11 @@ export default class Home extends React.Component<object, IState> {
       <div className="body">
         <div className="content">
           <h3 className="article-header">{title}</h3>
-          <ul className="tags">
-            { tags.map(tag => <li>{tag}</li>)}
-          </ul>
+          <div className="clearfix">
+            <ul className="tags">
+              { tags.map(tag => <li>{tag}</li>)}
+            </ul>
+          </div>
           <div
             id="content"
             className="article-detail"
