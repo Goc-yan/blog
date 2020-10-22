@@ -9,7 +9,7 @@ CREATE TABLE articles
   content text NOT NULL COMMENT '文章'
 ) DEFAULT CHARSET=utf8 COMMENT='文章包';
 
-CREATE TABLE category 
+CREATE TABLE categorys 
 (
   id bigint(20) AUTO_INCREMENT PRIMARY KEY COMMENT '主键',
   category varchar(6)  NOT NULL COMMENT '标签名'
